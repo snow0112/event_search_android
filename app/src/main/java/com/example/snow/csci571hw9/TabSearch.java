@@ -19,6 +19,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
 
 public class TabSearch extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -83,6 +90,29 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 fromm = radioButton.getText().toString();
                 speclox = specifylocation.getText().toString();
                 Toast.makeText(getActivity(),rad ,Toast.LENGTH_SHORT).show();
+                String url = "http://my-json-feed";
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // TODO: Handle error
+
+                            }
+                        });
+
+
+
+
+
+
             }
         });
 
