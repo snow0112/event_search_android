@@ -24,15 +24,20 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.concurrent.Executor;
 
 import ch.hsr.geohash.GeoHash;
@@ -54,6 +59,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
     public EditText specifylocation;
     public Button search;
     public Button clear;
+    public String currentgeohasg;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,8 +83,8 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                         if (location != null) {
                             currentlat = location.getLatitude();
                             currentlon = location.getLongitude();
-                            String hash = GeoHash.geoHashStringWithCharacterPrecision(currentlat,currentlon,12);
-                            Log.d("Geo",hash);
+                            currentgeohasg = GeoHash.geoHashStringWithCharacterPrecision(currentlat,currentlon,12);
+                            //Log.d("Geo",hash);
                         }
                     }
                 });
@@ -133,10 +139,45 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 RadioButton radioButton = (RadioButton) getView().findViewById(selectedid);
                 fromm = radioButton.getText().toString();
                 speclox = specifylocation.getText().toString();
-                Toast.makeText(getActivity(), seg ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), fromm ,Toast.LENGTH_SHORT).show();
+
+                if ( new String(fromm).equals("Other, Specify Location") ){
+                    try {
+                        String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/address-find/" +URLEncoder.encode(speclox,"UTF-8") ;
+                        RequestQueue queue = Volley.newRequestQueue(getContext());
+                        JsonObjectRequest addresslocation = new JsonObjectRequest
+                                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            JSONObject loc = response.getJSONArray("results").getJSONObject(0).getJSONObject("location");
+                                            double specifylat = loc.getDouble("lat");
+                                            double specifylon = loc.getDouble("lng");
+                                            Log.d("132", String.valueOf(specifylat));
+                                            Log.d("133", String.valueOf(specifylon));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d("error","Volley Error");
+                                        // TODO: Handle error
+
+                                    }
+                                });
+                        queue.add(addresslocation);
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
 
                 String url = "http://my-json-feed";
-
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                         (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -152,12 +193,21 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
 
                             }
                         });
+            }
+        });
 
+        here.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                specifylocation.setEnabled(false);
+                specifylocation.setText("");
+            }
+        });
 
-
-
-
-
+        there.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                specifylocation.setEnabled(true);
             }
         });
 

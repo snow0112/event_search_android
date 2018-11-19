@@ -123,6 +123,8 @@
         android:inputType="textPersonName"
         android:autofillHints=""
         android:layout_marginLeft="10dp"
+        android:enabled="false"
+
         />
 
     <Button
