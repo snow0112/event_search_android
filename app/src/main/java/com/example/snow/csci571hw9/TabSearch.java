@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONObject;
 
 import java.util.concurrent.Executor;
+
+import ch.hsr.geohash.GeoHash;
 
 
 public class TabSearch extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -74,6 +77,8 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                         if (location != null) {
                             currentlat = location.getLatitude();
                             currentlon = location.getLongitude();
+                            String hash = GeoHash.geoHashStringWithCharacterPrecision(currentlat,currentlon,12);
+                            Log.d("Geo",hash);
                         }
                     }
                 });
