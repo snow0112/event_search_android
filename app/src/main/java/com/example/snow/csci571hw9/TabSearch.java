@@ -1,5 +1,6 @@
 package com.example.snow.csci571hw9;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.wifi.aware.PublishConfig;
@@ -91,7 +92,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                         if (location != null) {
                             currentlat = location.getLatitude();
                             currentlon = location.getLongitude();
-                            currentgeohasg = GeoHash.geoHashStringWithCharacterPrecision(currentlat,currentlon,12);
+                            currentgeohasg = GeoHash.geoHashStringWithCharacterPrecision(currentlat,currentlon,9);
                             //Log.d("Geo",hash);
                         }
                     }
@@ -153,11 +154,18 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
             @Override
             public void onClick(View v) {
                 key = keyword.getText().toString();
+                try {
+                    key = URLEncoder.encode(key,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
                 cate = category.getSelectedItem().toString();
                 seg = segmentId();
 
                 rad = radius.getText().toString();
-                unitt = unit.getSelectedItem().toString();
+                String unittemp = unit.getSelectedItem().toString();
+                if ( new String(unittemp).equals("Miles") ){unitt = "miles";}else {unitt = "km";}
                 int selectedid = from.getCheckedRadioButtonId();
                 RadioButton radioButton = (RadioButton) getView().findViewById(selectedid);
                 fromm = radioButton.getText().toString();
@@ -179,7 +187,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             double specifylon = loc.getDouble("lng");
                                             //Log.d("132", String.valueOf(specifylat));
                                             //Log.d("133", String.valueOf(specifylon));
-                                            specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,12);
+                                            specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,9);
                                             forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
                                             Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
@@ -202,19 +210,11 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                     Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                 }
 
-                String url = "http://my-json-feed";
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                            @Override
-                            public void onResponse(JSONObject response) {
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // TODO: Handle error
-                            }
-                        });
+                // open nwe activity
+                Intent searchresult;
+                searchresult = new Intent(getActivity(), SearchResultActivity.class);
+                searchresult.putExtra("forminputs",forminputs);
+                startActivity (searchresult);
             }
         });
 

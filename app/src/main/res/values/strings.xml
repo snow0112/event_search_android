@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CSCI571HW9</string>
+    <string name="app_name">Event Search</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
@@ -16,6 +16,8 @@
     <string name="typw_in_the_location">Typw in the Location</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
+    <string name="type_in_the_location">Type in the location</string>
+    <string name="search_result">search result</string>
 
     <string-array name="categories">
         <item>All</item>
