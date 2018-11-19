@@ -16,4 +16,20 @@
     <string name="typw_in_the_location">Typw in the Location</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
+
+    <string-array name="categories">
+        <item>All</item>
+        <item>Music</item>
+        <item>Sports</item>
+        <item>Arts</item>
+        <item>Theater</item>
+        <item>Film</item>
+        <item>Miscellaneous</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>Miles</item>
+        <item>Kilometers</item>
+    </string-array>
+
 </resources>
