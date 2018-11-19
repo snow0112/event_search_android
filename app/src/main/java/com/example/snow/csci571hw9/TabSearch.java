@@ -135,6 +135,20 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
         search = (Button) getView().findViewById(R.id.search);
         clear = (Button) getView().findViewById(R.id.clear);
 
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                keyword.getText().clear();
+                radius.getText().clear();
+                specifylocation.getText().clear();
+                specifylocation.setEnabled(false);
+                here.setChecked(true);
+                there.setChecked(false);
+                category.setSelection(0);
+                unit.setSelection(0);
+            }
+        });
+
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +162,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 RadioButton radioButton = (RadioButton) getView().findViewById(selectedid);
                 fromm = radioButton.getText().toString();
                 speclox = specifylocation.getText().toString();
-                Toast.makeText(getActivity(), autooptions.get(0) ,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), autooptions.get(0) ,Toast.LENGTH_SHORT).show();
 
 
                 if ( new String(fromm).equals("Other, Specify Location") ){
@@ -163,34 +177,29 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             JSONObject loc = response.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
                                             double specifylat = loc.getDouble("lat");
                                             double specifylon = loc.getDouble("lng");
-                                            Log.d("132", String.valueOf(specifylat));
-                                            Log.d("133", String.valueOf(specifylon));
+                                            //Log.d("132", String.valueOf(specifylat));
+                                            //Log.d("133", String.valueOf(specifylon));
                                             specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,12);
                                             forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
-                                            //Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
-
                                     }
                                 }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d("error","Volley Error");
                                         // TODO: Handle error
-
                                     }
                                 });
                         queue.add(addresslocation);
-
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-
-
                 } else{
                     forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
-                    //Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                 }
 
                 String url = "http://my-json-feed";
@@ -199,14 +208,11 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
 
                             @Override
                             public void onResponse(JSONObject response) {
-
                             }
                         }, new Response.ErrorListener() {
-
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 // TODO: Handle error
-
                             }
                         });
             }
@@ -216,7 +222,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
             @Override
             public void onClick(View v) {
                 specifylocation.setEnabled(false);
-                specifylocation.setText("");
+                specifylocation.getText().clear();
             }
         });
 
@@ -254,11 +260,8 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                         autooptions.toArray();
                                         ArrayAdapter<String> adapter_autocomplete = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line , autooptions);
                                         keyword.setAdapter(adapter_autocomplete);
-
                                     } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                        e.printStackTrace(); }
                                 }
                             }, new Response.ErrorListener() {
                                 @Override
