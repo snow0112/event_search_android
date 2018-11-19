@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +35,14 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import ch.hsr.geohash.GeoHash;
@@ -51,6 +56,8 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
     public FusedLocationProviderClient mFusedLocationClient;
 
     public AutoCompleteTextView keyword;
+    public List<String> autooptions;
+
     public Spinner category;
     public EditText radius;
     public Spinner unit;
@@ -141,7 +148,8 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 RadioButton radioButton = (RadioButton) getView().findViewById(selectedid);
                 fromm = radioButton.getText().toString();
                 speclox = specifylocation.getText().toString();
-                //Toast.makeText(getActivity(), fromm ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), autooptions.get(0) ,Toast.LENGTH_SHORT).show();
+
 
                 if ( new String(fromm).equals("Other, Specify Location") ){
                     try {
@@ -159,7 +167,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             Log.d("133", String.valueOf(specifylon));
                                             specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,12);
                                             forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
-                                            Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -182,7 +190,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
 
                 } else{
                     forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
-                    Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                 }
 
                 String url = "http://my-json-feed";
@@ -216,6 +224,55 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
             @Override
             public void onClick(View v) {
                 specifylocation.setEnabled(true);
+            }
+        });
+
+        keyword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                key = keyword.getText().toString();
+                try {
+                    String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/auto-complete/" + URLEncoder.encode(key,"UTF-8");
+                    RequestQueue queue = Volley.newRequestQueue(getContext());
+                    JsonObjectRequest addresslocation = new JsonObjectRequest
+                            (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        JSONArray attractions = response.getJSONObject("_embedded").getJSONArray("attractions");
+                                        autooptions = new ArrayList<String>() ;
+                                        for ( int i = 0; i < attractions.length() ; i++) {
+                                            //attractions.getJSONObject(i).getString("name");
+                                            autooptions.add( attractions.getJSONObject(i).getString("name") );
+                                        }
+                                        autooptions.toArray();
+                                        ArrayAdapter<String> adapter_autocomplete = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line , autooptions);
+                                        keyword.setAdapter(adapter_autocomplete);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.d("error","Volley Error");
+                                    // TODO: Handle error
+
+                                }
+                            });
+                    queue.add(addresslocation);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
