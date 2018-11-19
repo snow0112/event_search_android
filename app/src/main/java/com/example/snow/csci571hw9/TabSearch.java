@@ -67,7 +67,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        mFusedLocationClient.getLastLocation().addOnSuccessListener((Executor) this, new OnSuccessListener<Location>() {
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
