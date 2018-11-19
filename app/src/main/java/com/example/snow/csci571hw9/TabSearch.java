@@ -1,9 +1,12 @@
 package com.example.snow.csci571hw9;
 
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.wifi.aware.PublishConfig;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -23,13 +26,20 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
+import java.util.concurrent.Executor;
 
-public class TabSearch extends Fragment implements AdapterView.OnItemSelectedListener{
+
+public class TabSearch extends Fragment implements AdapterView.OnItemSelectedListener {
 
     public String key, cate, seg, rad, unitt, fromm, speclox;
+    public double currentlat, currentlon;
+    public FusedLocationProviderClient mFusedLocationClient;
 
     public AutoCompleteTextView keyword;
     public Spinner category;
@@ -41,6 +51,35 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
     public EditText specifylocation;
     public Button search;
     public Button clear;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mFusedLocationClient.getLastLocation().addOnSuccessListener((Executor) this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            currentlat = location.getLatitude();
+                            currentlon = location.getLongitude();
+                        }
+                    }
+                });
+
+    }
+
 
 
 
@@ -89,7 +128,8 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 RadioButton radioButton = (RadioButton) getView().findViewById(selectedid);
                 fromm = radioButton.getText().toString();
                 speclox = specifylocation.getText().toString();
-                Toast.makeText(getActivity(),rad ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), seg ,Toast.LENGTH_SHORT).show();
+
                 String url = "http://my-json-feed";
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
