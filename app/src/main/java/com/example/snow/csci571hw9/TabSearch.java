@@ -47,6 +47,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
 
     public String key, cate, seg, rad, unitt, fromm, speclox;
     public double currentlat, currentlon;
+    public String forminputs;
     public FusedLocationProviderClient mFusedLocationClient;
 
     public AutoCompleteTextView keyword;
@@ -59,7 +60,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
     public EditText specifylocation;
     public Button search;
     public Button clear;
-    public String currentgeohasg;
+    public String currentgeohasg,  specifgeohasg;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,6 +116,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
     unitspinner.setAdapter(unitadapter);
 
         keyword = (AutoCompleteTextView) getView().findViewById(R.id.keyword);
+
         category = (Spinner) getView().findViewById(R.id.category);
         radius = (EditText) getView().findViewById(R.id.radius);
         unit = (Spinner) getView().findViewById(R.id.unit);
@@ -139,7 +141,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 RadioButton radioButton = (RadioButton) getView().findViewById(selectedid);
                 fromm = radioButton.getText().toString();
                 speclox = specifylocation.getText().toString();
-                Toast.makeText(getActivity(), fromm ,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), fromm ,Toast.LENGTH_SHORT).show();
 
                 if ( new String(fromm).equals("Other, Specify Location") ){
                     try {
@@ -155,6 +157,9 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             double specifylon = loc.getDouble("lng");
                                             Log.d("132", String.valueOf(specifylat));
                                             Log.d("133", String.valueOf(specifylon));
+                                            specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,12);
+                                            forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
+                                            Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -175,6 +180,9 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                     }
 
 
+                } else{
+                    forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
+                    Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                 }
 
                 String url = "http://my-json-feed";
