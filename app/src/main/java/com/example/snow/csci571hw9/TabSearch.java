@@ -150,7 +150,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                     @Override
                                     public void onResponse(JSONObject response) {
                                         try {
-                                            JSONObject loc = response.getJSONArray("results").getJSONObject(0).getJSONObject("location");
+                                            JSONObject loc = response.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
                                             double specifylat = loc.getDouble("lat");
                                             double specifylon = loc.getDouble("lng");
                                             Log.d("132", String.valueOf(specifylat));
