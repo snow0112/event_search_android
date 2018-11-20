@@ -64,9 +64,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        JSONObject event;
+        final JSONObject event;
 
-        Picasso.get().load( imageURL() ).into(holder.category);
+        String cate = new String();
+        try {
+            cate = EventList.getJSONObject(position).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Picasso.get().load( imageURL(cate) ).into(holder.category);
 
         String name = new String();
         try {
@@ -84,8 +90,35 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
         holder.venuename.setText(venue);
 
+        String eventid = new String();
+        try {
+            eventid = EventList.getJSONObject(position).getString("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String artist1 = new String();
+        try {
+            artist1 = EventList.getJSONObject(position).getJSONObject("_embedded").getJSONArray("attractions").getJSONObject(0).getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        String artist2 = new String();
+        try {
+            artist2 = EventList.getJSONObject(position).getJSONObject("_embedded").getJSONArray("attractions").getJSONObject(1).getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         final String finalName = name;
-        final String finalName1 = name;
+        final String finalVenue = venue;
+        final String finalId = eventid;
+        final String finalArtist = artist2;
+        final String finalArtist1 = artist1;
+        final String finalCate = cate;
+
         holder.eventitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,13 +128,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     Intent detailpage;
                     detailpage = new Intent( context ,DetailPageActivity.class);
                     detailpage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    //detailpage.putExtra("eventname", finalName1);
+                    detailpage.putExtra("event_name", finalName);
+                    detailpage.putExtra("event_id", finalId);
+                    detailpage.putExtra("venue", finalVenue);
+                    detailpage.putExtra("artist1", finalArtist1);
+                    detailpage.putExtra("artist2", finalArtist);
+                    detailpage.putExtra("segment_id", finalCate);
                     context.startActivity (detailpage);
-                } catch (Exception e) {
-                }
-
-
-
+                } catch (Exception e) { }
 
             }
         });
@@ -130,12 +164,19 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
     }
 
-    public String imageURL(){
+    public String imageURL(String cate){
         String music = "http://csci571.com/hw/hw9/images/android/music_icon.png";
         String sports = "http://csci571.com/hw/hw9/images/android/sport_icon.png";
         String artandtheater = "http://csci571.com/hw/hw9/images/android/art_icon.png";
         String miscellaneous = "http://csci571.com/hw/hw9/images/android/miscellaneous_icon.png";
         String film = "http://csci571.com/hw/hw9/images/android/film_icon.png";
+
+
+        if ( new String(cate).equals("KZFzniwnSyZfZ7v7nJ") ){ return music ; }
+        if ( new String(cate).equals("KZFzniwnSyZfZ7v7nE")){ return sports; }
+        if ( new String(cate).equals("KZFzniwnSyZfZ7v7na")){ return artandtheater; }
+        if ( new String(cate).equals("KZFzniwnSyZfZ7v7nn")){ return film; }
+        if ( new String(cate).equals("KZFzniwnSyZfZ7v7n1")){ return miscellaneous; }
         return  sports;
     }
 

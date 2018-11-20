@@ -1,5 +1,6 @@
 package com.example.snow.csci571hw9;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -36,11 +37,20 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private String event_name, event_id, venuename, artist1,artist2, segment_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_page);
+
+        Intent inputsource = getIntent();
+        event_name = inputsource.getStringExtra("event_name");
+        event_id = inputsource.getStringExtra("event_id");
+        venuename = inputsource.getStringExtra("venue");
+        artist1 = inputsource.getStringExtra("artist1");
+        artist2 = inputsource.getStringExtra("artist2");
+        segment_id = inputsource.getStringExtra("segment_id");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,16 +129,16 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    TabEvent tabEvent = new TabEvent();
+                    TabEvent tabEvent = new TabEvent(event_id);
                     return tabEvent;
                 case 1:
-                    TabArtist tabArtist = new TabArtist();
+                    TabArtist tabArtist = new TabArtist(segment_id,artist1,artist1);
                     return tabArtist;
                 case 2:
-                    TabVenue tabVenue = new TabVenue();
+                    TabVenue tabVenue = new TabVenue(venuename);
                     return  tabVenue;
                 case 3:
-                    TabUpcoming tabUpcoming = new TabUpcoming();
+                    TabUpcoming tabUpcoming = new TabUpcoming(venuename);
                     return tabUpcoming;
             }
             return null;
@@ -137,7 +147,6 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 4;
         }
 
