@@ -18,6 +18,7 @@
     <string name="clear">Clear</string>
     <string name="type_in_the_location">Type in the location</string>
     <string name="search_result">search result</string>
+    <string name="eventname">eventname</string>
 
     <string-array name="categories">
         <item>All</item>
