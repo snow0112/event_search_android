@@ -115,7 +115,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final String finalName = name;
         final String finalVenue = venue;
         final String finalId = eventid;
-        final String finalArtist = artist2;
+        final String finalArtist2 = artist2;
         final String finalArtist1 = artist1;
         final String finalCate = cate;
 
@@ -132,7 +132,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     detailpage.putExtra("event_id", finalId);
                     detailpage.putExtra("venue", finalVenue);
                     detailpage.putExtra("artist1", finalArtist1);
-                    detailpage.putExtra("artist2", finalArtist);
+                    detailpage.putExtra("artist2", finalArtist2);
                     detailpage.putExtra("segment_id", finalCate);
                     context.startActivity (detailpage);
                 } catch (Exception e) { }

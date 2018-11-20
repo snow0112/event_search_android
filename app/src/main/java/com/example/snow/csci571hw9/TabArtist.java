@@ -1,6 +1,8 @@
 package com.example.snow.csci571hw9;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +29,9 @@ import java.net.URLEncoder;
 
 public class TabArtist extends Fragment {
     private String segment_id, artist1, artist2;
-    private TextView hello;
+    private TextView atris1_name0,atris1_name,atris1_follower,atris1_popilarity,atris1_url;
+    private String Satris1_name,Satris1_follower,Satris1_popilarity,Satris1_url;
+    public JSONObject Artist1_Spotify;
 
     public TabArtist() {
     }
@@ -61,6 +65,7 @@ public class TabArtist extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Artist1_Spotify = response;
                         //hello.setText(response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -87,7 +92,7 @@ public class TabArtist extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        hello.setText(response.toString());
+                        //hello.setText(response.toString());
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -109,7 +114,23 @@ public class TabArtist extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hello = (TextView) getView().findViewById(R.id.textView3);
-        hello.setText(segment_id+","+artist1+","+artist2);
+        //hello = (TextView) getView().findViewById(R.id.textView3);
+        //hello.setText(segment_id+","+artist1+","+artist2);
+        atris1_name0 = (TextView) getView().findViewById(R.id.atris1_name0);
+        atris1_name0.setText(artist1);
+        atris1_url = (TextView) getView().findViewById(R.id.atris1_url);;
+
+        atris1_url.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://open.spotify.com/artist/66CXWjxzNUsdJxJ2JdwvnR";
+                Uri webpage = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 }
