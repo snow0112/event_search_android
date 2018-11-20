@@ -1,13 +1,18 @@
 package com.example.snow.csci571hw9;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +22,7 @@ import java.util.ResourceBundle;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private JSONArray EventList;
+    private Context context;
 
 
     // Provide a reference to the views for each data item
@@ -33,8 +39,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     // Provide a suitable constructor (depends on the kind of dataset)
 
-    public EventAdapter(JSONArray Events) {
+    public EventAdapter(JSONArray Events, Context context) {
         EventList = Events;
+        this.context = context;
         Log.d("tag",EventList.toString());
     }
 
@@ -54,14 +61,34 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         JSONObject event;
+
+        Picasso.get().load( imageURL() ).into(holder.category);
+
         String name = new String();
         try {
             name = EventList.getJSONObject(position).getString("name");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         holder.eventname.setText(name);
+
+        String venue = new String();
+        try {
+            venue = EventList.getJSONObject(position).getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.venuename.setText(venue);
+
+        final String finalName = name;
+        holder.eventitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -73,11 +100,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView eventname;
+        public TextView venuename;
+        public ImageView category;
+        public RelativeLayout eventitem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             eventname = (TextView) itemView.findViewById(R.id.eventname);
+            venuename = (TextView) itemView.findViewById(R.id.venuename);
+            category = (ImageView) itemView.findViewById(R.id.category);
+            eventitem = (RelativeLayout) itemView.findViewById(R.id.eventitem);
         }
+    }
+
+    public String imageURL(){
+        String music = "http://csci571.com/hw/hw9/images/android/music_icon.png";
+        String sports = "http://csci571.com/hw/hw9/images/android/sport_icon.png";
+        String artandtheater = "http://csci571.com/hw/hw9/images/android/art_icon.png";
+        String miscellaneous = "http://csci571.com/hw/hw9/images/android/miscellaneous_icon.png";
+        String film = "http://csci571.com/hw/hw9/images/android/film_icon.png";
+        return  sports;
     }
 
 }

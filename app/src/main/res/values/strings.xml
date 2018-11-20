@@ -19,6 +19,9 @@
     <string name="type_in_the_location">Type in the location</string>
     <string name="search_result">search result</string>
     <string name="eventname">eventname</string>
+    <string name="venuename">venuename</string>
+    <string name="time">time</string>
+    <string name="date">date</string>
 
     <string-array name="categories">
         <item>All</item>

@@ -1,13 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <RelativeLayout
+        android:id="@+id/eventitem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/category"
+        android:padding="5dp"/>
+
     <TextView
         android:id="@+id/eventname"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/eventname" />
+        android:layout_toEndOf="@+id/category"
+        android:text="@string/eventname"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/venuename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/category"
+        android:text="@string/venuename"
+        android:layout_below="@+id/eventname" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/category"
+        android:text="@string/date"
+        android:layout_below="@+id/venuename" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/date"
+        android:text="@string/time"
+        android:layout_below="@+id/venuename"
+        android:layout_marginLeft="10dp"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/favorite"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
