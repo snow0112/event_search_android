@@ -1,6 +1,7 @@
 package com.example.snow.csci571hw9;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ResourceBundle;
+
+import static android.app.PendingIntent.getActivity;
+import static android.support.v4.content.ContextCompat.startActivity;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private JSONArray EventList;
@@ -81,10 +85,23 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.venuename.setText(venue);
 
         final String finalName = name;
+        final String finalName1 = name;
         holder.eventitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
+
+                try {
+                    Intent detailpage;
+                    detailpage = new Intent( context ,DetailPageActivity.class);
+                    detailpage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    //detailpage.putExtra("eventname", finalName1);
+                    context.startActivity (detailpage);
+                } catch (Exception e) {
+                }
+
+
+
 
             }
         });

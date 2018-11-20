@@ -37,5 +37,6 @@
         <item>Miles</item>
         <item>Kilometers</item>
     </string-array>
+    <string name="title_activity_detail_page">DetailPageActivity</string>
 
 </resources>
