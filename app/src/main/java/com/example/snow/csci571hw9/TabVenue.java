@@ -17,13 +17,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class TabVenue extends Fragment {
+public class TabVenue extends Fragment implements OnMapReadyCallback {
     private  String venuename;
     private TextView hello;
 
@@ -61,6 +67,13 @@ public class TabVenue extends Fragment {
                 });
         queue.add(addresslocation);
 
+        //MapFragment m = new MapFragment();
+
+        //SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        //mapFragment.getMapAsync(this);
+
+
+
     }
 
 
@@ -77,4 +90,13 @@ public class TabVenue extends Fragment {
         hello.setText(venuename);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // Add a marker in Sydney, Australia,
+        // and move the map's camera to the same location.
+        LatLng sydney = new LatLng(-33.852, 151.211);
+        googleMap.addMarker(new MarkerOptions().position(sydney)
+                .title("Marker in Sydney"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
 }

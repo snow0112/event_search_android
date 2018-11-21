@@ -1,10 +1,14 @@
 package com.example.snow.csci571hw9;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -12,14 +16,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.lang.reflect.Method;
 
 public class DetailPageActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -53,7 +65,21 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         segment_id = inputsource.getStringExtra("segment_id");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.setNavigationIcon();
+        toolbar.setTitle(event_name);
+        toolbar.inflateMenu(R.menu.menu_detail_page);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                return true;
+            }
+        });
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -68,6 +94,35 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail_page, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_favorite :
+                Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_twitter :
+                //Toast.makeText(this, "twitter" ,Toast.LENGTH_SHORT).show();
+                String tweettext = "Check out " + event_name + " located at " + venuename +". Website: " + "eventurl";
+                String url = "https://twitter.com/intent/tweet?text="+tweettext+"&hashtags=CSCI571EventSearch";
+                Uri webpage = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                return true;
+            default :
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
