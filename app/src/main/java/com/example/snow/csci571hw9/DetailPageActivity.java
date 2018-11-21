@@ -115,13 +115,13 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
             imageView.setMaxHeight(18);
             imageView.setMaxWidth(18);
             imageView.setImageResource(R.drawable.heart_outline_white);
-            item.setActionView(imageView);
+            //item.setActionView(imageView);
         }
         if (item.getItemId() == R.id.action_twitter) {
             ImageView imageView = new ImageView(this);
             imageView.setMaxHeight(18);
             imageView.setMaxWidth(18);
-            imageView.setImageResource(R.drawable.heart_outline_white);
+            imageView.setImageResource(R.drawable.heart_fill_white);
             item.setActionView(imageView);
         }
 
