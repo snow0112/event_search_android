@@ -112,6 +112,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
+        holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+
         final String finalName = name;
         final String finalVenue = venue;
         final String finalId = eventid;
@@ -153,6 +155,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public TextView eventname;
         public TextView venuename;
         public ImageView category;
+        public ImageView favoriteresult;
         public RelativeLayout eventitem;
 
         public ViewHolder(@NonNull View itemView) {
@@ -160,6 +163,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             eventname = (TextView) itemView.findViewById(R.id.eventname);
             venuename = (TextView) itemView.findViewById(R.id.venuename);
             category = (ImageView) itemView.findViewById(R.id.category);
+            favoriteresult = (ImageView) itemView.findViewById(R.id.favoriteresult);
             eventitem = (RelativeLayout) itemView.findViewById(R.id.eventitem);
         }
     }

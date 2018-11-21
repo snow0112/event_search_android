@@ -12,9 +12,9 @@
 
     <item
         android:id="@+id/action_twitter"
+        android:icon="@mipmap/twitter_ic"
         android:title="twitter"
-        app:showAsAction="always" />
-
-
+        app:showAsAction="always">
+    </item>
 
 </menu>

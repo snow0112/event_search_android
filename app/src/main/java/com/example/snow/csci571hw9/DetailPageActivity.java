@@ -1,6 +1,7 @@
 package com.example.snow.csci571hw9;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -27,9 +28,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Method;
 
@@ -101,6 +105,26 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_page, menu);
+        //ImageView twetterimg = (ImageView) findViewById(R.id.action_twitter);
+        //Picasso.get().load("http://csci571.com/hw/hw9/images/android/twitter_ic.png").into(twetterimg);
+
+        MenuItem item = menu.getItem(0);
+
+        if (item.getItemId() == R.id.action_favorite) {
+            ImageView imageView = new ImageView(this);
+            imageView.setMaxHeight(18);
+            imageView.setMaxWidth(18);
+            imageView.setImageResource(R.drawable.heart_outline_white);
+            item.setActionView(imageView);
+        }
+        if (item.getItemId() == R.id.action_twitter) {
+            ImageView imageView = new ImageView(this);
+            imageView.setMaxHeight(18);
+            imageView.setMaxWidth(18);
+            imageView.setImageResource(R.drawable.heart_outline_white);
+            item.setActionView(imageView);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 

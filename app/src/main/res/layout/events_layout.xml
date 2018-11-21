@@ -7,13 +7,16 @@
 
     <RelativeLayout
         android:id="@+id/eventitem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="80dp"
+        >
 
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/category"
+        android:scaleType="fitCenter"
         android:padding="5dp"/>
 
     <TextView
@@ -54,7 +57,9 @@
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:id="@+id/favorite"
+        android:id="@+id/favoriteresult"
+        android:scaleType="fitCenter"
+        android:padding="15dp"
         android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
