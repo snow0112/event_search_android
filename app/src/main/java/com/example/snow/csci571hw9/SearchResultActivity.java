@@ -34,7 +34,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private String forminputs;
     private TextView hello;
     private RecyclerView event;
-    public SharedPreferences favolist;
+    public static SharedPreferences favolist;
     public static SharedPreferences.Editor faveditor;
 
 
@@ -43,27 +43,20 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_result_activity);
 
-
-
         Intent inputsource = getIntent();
         forminputs = inputsource.getStringExtra("forminputs");
         hello = (TextView) findViewById(R.id.text);
         RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
         pb.setVisibility(View.VISIBLE);
 
-
         favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
         faveditor = favolist.edit();
-
-        //progress
-
 
         // Recycler view
         event = (RecyclerView) findViewById(R.id.eventslist);
         event.setLayoutManager(new LinearLayoutManager(this));
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         event.setLayoutManager(mLayoutManager);
-
 
         String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/event-search/" + forminputs;
         Log.d("132", String.valueOf(url));

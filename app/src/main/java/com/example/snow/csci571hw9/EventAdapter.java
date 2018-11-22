@@ -154,25 +154,24 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
 
         String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
-        if ( new String(eventinfav).equals("nono") ){
-            holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+        if ( SearchResultActivity.favolist.contains(finalId) ){
+            holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
         }else{
-            holder.favoriteresult.setImageResource(R.drawable.heart_fill_red); }
+            holder.favoriteresult.setImageResource(R.drawable.heart_outline_black); }
 
         holder.favoriteresult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
                 String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
-                if ( new String(eventinfav).equals("nono") ){
-                    SearchResultActivity.faveditor.putString(finalId,finalevent);
-                    SearchResultActivity.faveditor.commit();
-                    holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
-
-                }else{
+                if ( SearchResultActivity.favolist.contains(finalId) ){
                     SearchResultActivity.faveditor.remove(finalId);
                     SearchResultActivity.faveditor.commit();
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+                }else{
+                    SearchResultActivity.faveditor.putString(finalId,finalevent);
+                    SearchResultActivity.faveditor.commit();
+                    holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
                 }
 
 

@@ -118,11 +118,11 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_page, menu);
 
-        String eventinfav = getSharedPreferences("favoritelist", MODE_PRIVATE).getString(event_id,"nono");
-        if ( new String(eventinfav).equals("nono") ){
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
-        }else{
+
+        if (favolist.contains(event_id) ){
             menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
+        }else{
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
         }
 
         //ImageView twetterimg = (ImageView) findViewById(R.id.action_twitter);
@@ -136,15 +136,15 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         switch(item.getItemId()){
             case R.id.action_favorite :
 
-                String eventinfav = getSharedPreferences("favoritelist", MODE_PRIVATE).getString(event_id,"nono");
-                if ( new String(eventinfav).equals("nono") ){
-                    SearchResultActivity.faveditor.putString(event_id,eventstring);
-                    SearchResultActivity.faveditor.commit();
-                   item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
-                }else{
+
+                if ( favolist.contains(event_id) ){
                     SearchResultActivity.faveditor.remove(event_id);
                     SearchResultActivity.faveditor.commit();
-                   item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+                    item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+                }else{
+                    SearchResultActivity.faveditor.putString(event_id,eventstring);
+                    SearchResultActivity.faveditor.commit();
+                    item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
                 }
                 Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
                 //item.setIcon(R.drawable.heart_fill_red);
