@@ -30,6 +30,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private Context context;
     public  JSONObject event;
 
+    public static SharedPreferences favolist;
+    public static SharedPreferences.Editor faveditor;
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -48,6 +51,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public EventAdapter(JSONArray Events, Context context) {
         EventList = Events;
         this.context = context;
+        favolist = context.getSharedPreferences("favoritelist",context.MODE_PRIVATE);
+        faveditor = favolist.edit();
         Log.d("tag",EventList.toString());
     }
 
@@ -56,7 +61,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.events_layout, parent, false);
-
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -155,7 +159,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
 
-        if ( SearchResultActivity.favolist.contains(finalId) ){
+
+        if ( favolist.contains(finalId) ){
             holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
         }else{
             holder.favoriteresult.setImageResource(R.drawable.heart_outline_black); }
@@ -165,13 +170,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             public void onClick(View v) {
                 Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
                 //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
-                if ( SearchResultActivity.favolist.contains(finalId) ){
-                    SearchResultActivity.faveditor.remove(finalId);
-                    SearchResultActivity.faveditor.commit();
+                if ( favolist.contains(finalId) ){
+                    faveditor.remove(finalId);
+                    faveditor.commit();
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
                 }else{
-                    SearchResultActivity.faveditor.putString(finalId,finalevent);
-                    SearchResultActivity.faveditor.commit();
+                    faveditor.putString(finalId,finalevent);
+                    faveditor.commit();
                     holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
                 }
 
