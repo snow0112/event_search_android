@@ -153,7 +153,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         });
 
 
-        String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
+        //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
+
         if ( SearchResultActivity.favolist.contains(finalId) ){
             holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
         }else{
@@ -163,7 +164,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
-                String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
+                //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
                 if ( SearchResultActivity.favolist.contains(finalId) ){
                     SearchResultActivity.faveditor.remove(finalId);
                     SearchResultActivity.faveditor.commit();
