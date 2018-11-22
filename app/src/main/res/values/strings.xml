@@ -53,5 +53,6 @@
     <string name="spotify">Spotify</string>
     <string name="favorite">favorite</string>
     <string name="twitter" />
+    <string name="searching_events">Searching Events ...</string>
 
 </resources>

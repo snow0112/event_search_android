@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,9 +43,14 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_result_activity);
 
+
+
         Intent inputsource = getIntent();
         forminputs = inputsource.getStringExtra("forminputs");
         hello = (TextView) findViewById(R.id.text);
+        RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
+        pb.setVisibility(View.VISIBLE);
+
 
         favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
         faveditor = favolist.edit();
@@ -68,23 +75,28 @@ public class SearchResultActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         //hello.setText("response get");
+                        RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
+                        pb.setVisibility(View.INVISIBLE);
                         try {
                             JSONArray Events = response.getJSONObject("_embedded").getJSONArray("events");
                             //hello.setText(Events.toString());
-
+                            if (Events.length() == 0 ){
+                                TextView noresult = (TextView) findViewById(R.id.eventnoresult);
+                            }
+                            else{
                             EventAdapter eventAdapter = new EventAdapter(Events, getApplicationContext());
-                            event.setAdapter(eventAdapter);
+                            event.setAdapter(eventAdapter);}
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-
+                            ERRORtoast();
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("error","Volley Error");
-                        // TODO: Handle error
+                        ERRORtoast();
                     }
                 });
         queue.add(eventsearch);
@@ -92,6 +104,10 @@ public class SearchResultActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
 
+    }
+
+    public void ERRORtoast(){
+        Toast.makeText(this, "error" ,Toast.LENGTH_LONG).show();
     }
 
 
