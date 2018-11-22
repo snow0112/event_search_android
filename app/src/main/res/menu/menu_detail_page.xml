@@ -5,14 +5,14 @@
     tools:context="com.example.snow.csci571hw9.DetailPageActivity">
 
     <item
-    android:id="@+id/action_favorite"
-
-    android:title="@string/favorite"
-    app:showAsAction="always" />
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/heart_outline_white"
+        android:title="@string/favorite"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_twitter"
-        android:icon="@mipmap/twitter_ic"
+        android:icon="@drawable/twitter_icon"
         android:title="twitter"
         app:showAsAction="always">
     </item>

@@ -85,6 +85,8 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -105,25 +107,25 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_page, menu);
+
+
         //ImageView twetterimg = (ImageView) findViewById(R.id.action_twitter);
         //Picasso.get().load("http://csci571.com/hw/hw9/images/android/twitter_ic.png").into(twetterimg);
 
-        MenuItem item = menu.getItem(0);
+        MenuItem item1 = menu.getItem(1);
+        if (item1.getItemId() == R.id.action_twitter) {
+            ImageView imageView1 = new ImageView(this);
+            imageView1.setMaxHeight(18);
+            imageView1.setMaxWidth(18);
+            imageView1.setImageResource(R.mipmap.twitter_ic);
+            //item1.setActionView(imageView1);
+        }
 
-        if (item.getItemId() == R.id.action_favorite) {
-            ImageView imageView = new ImageView(this);
-            imageView.setMaxHeight(18);
-            imageView.setMaxWidth(18);
-            imageView.setImageResource(R.drawable.heart_outline_white);
-            //item.setActionView(imageView);
-        }
-        if (item.getItemId() == R.id.action_twitter) {
-            ImageView imageView = new ImageView(this);
-            imageView.setMaxHeight(18);
-            imageView.setMaxWidth(18);
-            imageView.setImageResource(R.drawable.heart_fill_white);
-            item.setActionView(imageView);
-        }
+        //ImageView tabicevent;
+        //tabicevent = (ImageView) findViewById(R.id.tab_event_icon);
+        //tabicevent.setMaxHeight(18);
+        //tabicevent.setMaxWidth(18);
+        //tabicevent.setImageResource(R.drawable.tab_ic_event);
 
         return super.onCreateOptionsMenu(menu);
     }
