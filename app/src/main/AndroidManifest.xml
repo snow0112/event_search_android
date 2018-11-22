@@ -42,7 +42,7 @@
         <activity
             android:name=".DetailPageActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".SearchResultActivity"
             android:label="@string/title_activity_detail_page"
 
            >

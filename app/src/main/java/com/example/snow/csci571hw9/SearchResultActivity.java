@@ -96,6 +96,8 @@ public class SearchResultActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("error","Volley Error");
+                        RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
+                        pb.setVisibility(View.INVISIBLE);
                         ERRORtoast();
                     }
                 });

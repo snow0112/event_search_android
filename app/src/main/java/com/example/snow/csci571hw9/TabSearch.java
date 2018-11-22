@@ -190,7 +190,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             //Log.d("133", String.valueOf(specifylon));
                                             specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,9);
                                             forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
-                                            Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_LONG).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }

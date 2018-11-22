@@ -3,11 +3,13 @@ package com.example.snow.csci571hw9;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
@@ -53,7 +55,9 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private String event_name, event_id, venuename, artist1,artist2, segment_id;
+    private String event_name, event_id, venuename, artist1,artist2, segment_id,eventstring;
+    public SharedPreferences favolist;
+    public static SharedPreferences.Editor faveditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         artist1 = inputsource.getStringExtra("artist1");
         artist2 = inputsource.getStringExtra("artist2");
         segment_id = inputsource.getStringExtra("segment_id");
+        eventstring = inputsource.getStringExtra("eventstring");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setNavigationIcon();
@@ -83,6 +88,10 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
+        faveditor = favolist.edit();
+
 
 
 
@@ -105,9 +114,16 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_page, menu);
 
+        String eventinfav = getSharedPreferences("favoritelist", MODE_PRIVATE).getString(event_id,"nono");
+        if ( new String(eventinfav).equals("nono") ){
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+        }else{
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
+        }
 
         //ImageView twetterimg = (ImageView) findViewById(R.id.action_twitter);
         //Picasso.get().load("http://csci571.com/hw/hw9/images/android/twitter_ic.png").into(twetterimg);
@@ -119,8 +135,19 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_favorite :
+
+                String eventinfav = getSharedPreferences("favoritelist", MODE_PRIVATE).getString(event_id,"nono");
+                if ( new String(eventinfav).equals("nono") ){
+                    SearchResultActivity.faveditor.putString(event_id,eventstring);
+                    SearchResultActivity.faveditor.commit();
+                   item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
+                }else{
+                    SearchResultActivity.faveditor.remove(event_id);
+                    SearchResultActivity.faveditor.commit();
+                   item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+                }
                 Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
-                item.setIcon(R.drawable.heart_fill_red);
+                //item.setIcon(R.drawable.heart_fill_red);
                 return true;
             case R.id.action_twitter :
                 //Toast.makeText(this, "twitter" ,Toast.LENGTH_SHORT).show();
