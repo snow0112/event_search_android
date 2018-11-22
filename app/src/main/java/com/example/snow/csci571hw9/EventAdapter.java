@@ -2,6 +2,7 @@ package com.example.snow.csci571hw9;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +28,7 @@ import static android.support.v4.content.ContextCompat.startActivity;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private JSONArray EventList;
     private Context context;
+    public  JSONObject event;
 
 
     // Provide a reference to the views for each data item
@@ -61,10 +63,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final JSONObject event;
+
+        try {
+            event = EventList.getJSONObject(position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         String cate = new String();
         try {
@@ -112,7 +119,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
-        holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+
+
 
         final String finalName = name;
         final String finalVenue = venue;
@@ -120,6 +128,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final String finalArtist2 = artist2;
         final String finalArtist1 = artist1;
         final String finalCate = cate;
+        final String finalevent = event.toString();
 
         holder.eventitem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,8 +145,36 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     detailpage.putExtra("artist1", finalArtist1);
                     detailpage.putExtra("artist2", finalArtist2);
                     detailpage.putExtra("segment_id", finalCate);
+                    detailpage.putExtra("eventstring", finalevent);
                     context.startActivity (detailpage);
                 } catch (Exception e) { }
+
+            }
+        });
+
+
+        String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
+        if ( new String(eventinfav).equals("nono") ){
+            holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+        }else{
+            holder.favoriteresult.setImageResource(R.drawable.heart_fill_red); }
+
+        holder.favoriteresult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
+                String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
+                if ( new String(eventinfav).equals("nono") ){
+                    SearchResultActivity.faveditor.putString(finalId,finalevent);
+                    SearchResultActivity.faveditor.commit();
+                    holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
+
+                }else{
+                    SearchResultActivity.faveditor.remove(finalId);
+                    SearchResultActivity.faveditor.commit();
+                    holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+                }
+
 
             }
         });

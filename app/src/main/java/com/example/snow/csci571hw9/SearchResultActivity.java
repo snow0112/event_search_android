@@ -2,6 +2,7 @@ package com.example.snow.csci571hw9;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
@@ -27,9 +28,12 @@ import ch.hsr.geohash.GeoHash;
 
 public class SearchResultActivity extends AppCompatActivity {
 
+
     private String forminputs;
     private TextView hello;
     private RecyclerView event;
+    public SharedPreferences favolist;
+    public static SharedPreferences.Editor faveditor;
 
 
     @Override
@@ -40,6 +44,9 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent inputsource = getIntent();
         forminputs = inputsource.getStringExtra("forminputs");
         hello = (TextView) findViewById(R.id.text);
+
+        favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
+        faveditor = favolist.edit();
 
         //progress
 

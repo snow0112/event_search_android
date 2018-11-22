@@ -112,21 +112,6 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         //ImageView twetterimg = (ImageView) findViewById(R.id.action_twitter);
         //Picasso.get().load("http://csci571.com/hw/hw9/images/android/twitter_ic.png").into(twetterimg);
 
-        MenuItem item1 = menu.getItem(1);
-        if (item1.getItemId() == R.id.action_twitter) {
-            ImageView imageView1 = new ImageView(this);
-            imageView1.setMaxHeight(18);
-            imageView1.setMaxWidth(18);
-            imageView1.setImageResource(R.mipmap.twitter_ic);
-            //item1.setActionView(imageView1);
-        }
-
-        //ImageView tabicevent;
-        //tabicevent = (ImageView) findViewById(R.id.tab_event_icon);
-        //tabicevent.setMaxHeight(18);
-        //tabicevent.setMaxWidth(18);
-        //tabicevent.setImageResource(R.drawable.tab_ic_event);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -135,6 +120,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         switch(item.getItemId()){
             case R.id.action_favorite :
                 Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
+                item.setIcon(R.drawable.heart_fill_red);
                 return true;
             case R.id.action_twitter :
                 //Toast.makeText(this, "twitter" ,Toast.LENGTH_SHORT).show();
