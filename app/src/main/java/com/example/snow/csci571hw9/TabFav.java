@@ -71,26 +71,8 @@ public class TabFav extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            /*
-            String name = new String();
-            try {
-                name = Event.getString("name");
-                Toast.makeText(getActivity(), name, Toast.LENGTH_SHORT).show();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
         }
         FavoList = new JSONArray(favlist);
-
-        /*
-        String name = new String();
-        try {
-            name = FavoList.getJSONObject(0).getString("name");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(getActivity(), name, Toast.LENGTH_SHORT).show();*/
 
     }
 
@@ -100,14 +82,6 @@ public class TabFav extends Fragment {
        //TextView hello = (TextView) getActivity().findViewById(R.id.favlist);
        // hello.setText(FavStringList.toString());
 
-        // Recycler view
-        //event = (RecyclerView) getActivity().findViewById(R.id.favoriterecycle);
-        //event.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        //event.setLayoutManager(mLayoutManager);
 
-
-        //EventAdapter eventAdapter = new EventAdapter(FavoList, getActivity().getApplicationContext());
-        //event.setAdapter(eventAdapter);}
     }
 }

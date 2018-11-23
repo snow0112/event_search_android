@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -26,9 +31,11 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class TabUpcoming extends Fragment {
+public class TabUpcoming extends Fragment  {
     private  String venuename;
-    private TextView hello;
+    private JSONArray UpcomingEvents = new JSONArray();
+    private Spinner sortspinner, ascendspinner;
+    RecyclerView recycler;
 
     public TabUpcoming() {
         this.venuename = new String();
@@ -54,7 +61,6 @@ public class TabUpcoming extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        hello.setText(response.toString());
                         call2dnAPI( response );
                     }
                 }, new Response.ErrorListener() {
@@ -76,7 +82,6 @@ public class TabUpcoming extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        hello.setText(venue_id);
 
         String url = null;
         url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/songkick-upcoming/"+venue_id;
@@ -85,7 +90,12 @@ public class TabUpcoming extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        hello.setText(response.toString());
+                        UpcomingEvents = response;
+                        recycler = (RecyclerView) getView().findViewById(R.id.upcominglist);
+                        UpcomingAdapter upcomingAdapter = new UpcomingAdapter(UpcomingEvents, getContext());
+                        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        recycler.setAdapter(upcomingAdapter);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -96,19 +106,85 @@ public class TabUpcoming extends Fragment {
                 });
         queue.add(upcomingevents);
 
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.tab_upcoming, container, false);
+        View rootView = inflater.inflate(R.layout.tab_upcoming, container, false);
+        recycler = (RecyclerView) rootView.findViewById(R.id.upcominglist);
+        UpcomingAdapter upcomingAdapter = new UpcomingAdapter(UpcomingEvents, getContext());
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler.setAdapter(upcomingAdapter);
+        return rootView;
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hello = (TextView) getView().findViewById(R.id.textView2);
-        hello.setText(venuename);
+
+        sortspinner = (Spinner) getView().findViewById(R.id.sortby);
+        ArrayAdapter<CharSequence> sortadapter = ArrayAdapter.createFromResource(getActivity(), R.array.sortby, android.R.layout.simple_spinner_item);
+        sortadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortspinner.setAdapter(sortadapter);
+
+        ascendspinner = (Spinner) getView().findViewById(R.id.acend);
+        ArrayAdapter<CharSequence> ascendadapter = ArrayAdapter.createFromResource(getActivity(), R.array.acend, android.R.layout.simple_spinner_item);
+        ascendadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ascendspinner.setAdapter(ascendadapter);
+        ascendspinner.setEnabled(false);
+
+        sortspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        ascendspinner.setEnabled(false);
+                        break;
+                    case 1:
+                        ascendspinner.setEnabled(true);
+                        break;
+                    case 2:
+                        ascendspinner.setEnabled(true);
+                        break;
+                    case 3:
+                        ascendspinner.setEnabled(true);
+                        break;
+                    case 4:
+                        ascendspinner.setEnabled(true);
+                        break;
+                    case 5:
+                        ascendspinner.setEnabled(true);
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ascendspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
     }
+
 }

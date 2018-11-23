@@ -37,6 +37,20 @@
         <item>Miles</item>
         <item>Kilometers</item>
     </string-array>
+
+    <string-array name="sortby">
+        <item>Default</item>
+        <item>Event Name</item>
+        <item>Time</item>
+        <item>Atrist</item>
+        <item>Type</item>
+    </string-array>
+
+    <string-array name="acend">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+
     <string name="title_activity_detail_page">DetailPageActivity</string>
     <string name="event">Event</string>
     <string name="artist_s">Artist(s)</string>
