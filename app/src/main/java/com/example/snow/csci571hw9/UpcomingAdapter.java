@@ -1,6 +1,8 @@
 package com.example.snow.csci571hw9;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +21,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     private JSONArray UpcomingList;
     private Context context;
     public JSONObject event;
-    private TextView upcoming_eventname;
-    private TextView upcoming_artist;
-    private TextView upcoming_time;
-    private TextView upcoming_type;
+
 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -59,11 +58,22 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         }
         holder.upcoming_eventname.setText(name);
 
-        final String finalName = name;
+        String uri = new String();
+        try {
+            uri = UpcomingList.getJSONObject(position).getString("uri");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final String finalUri = uri;
         holder.upcoming_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
+                Uri webpage = Uri.parse(finalUri);
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                if (intent.resolveActivity(context.getPackageManager()) != null) {
+                    context.startActivity(intent);
+                }
+                Toast.makeText(context, finalUri, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -73,7 +83,11 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return 5;
+        if (UpcomingList.length() >5){
+        return 5;}
+        else{
+            return UpcomingList.length();
+        }
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder{

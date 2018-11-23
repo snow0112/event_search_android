@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,8 @@ public class TabArtist extends Fragment {
     private TextView atris1_name0,atris1_name,atris1_follower,atris1_popilarity,atris1_url;
     private String Satris1_name,Satris1_follower,Satris1_popilarity,Satris1_url;
     public JSONObject Artist1_Spotify;
+    private RecyclerView recycler1;
+    private JSONArray Artist1_Photos = new JSONArray();
 
     public TabArtist() {
     }
@@ -41,6 +45,7 @@ public class TabArtist extends Fragment {
         this.segment_id = segment_id;
         this.artist1 = artist1;
         this.artist2 = artist2;
+
     }
 
     @Override
@@ -49,7 +54,7 @@ public class TabArtist extends Fragment {
         if(  new String(this.segment_id).equals("KZFzniwnSyZfZ7v7nJ" ) ) {
             callSpotifyAPI(artist1);
         }
-        //callCustomAPI(artist1);
+        callCustomAPI(artist1);
     }
 
     public void callSpotifyAPI(String artist){
@@ -92,6 +97,11 @@ public class TabArtist extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Artist1_Photos = response;
+                        recycler1 = (RecyclerView) getView().findViewById(R.id.artist1_photos);
+                        PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
+                        recycler1.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        recycler1.setAdapter(photoAdapter1);
                         //hello.setText(response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -108,7 +118,12 @@ public class TabArtist extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.tab_artist, container, false);
+        View rootView = inflater.inflate(R.layout.tab_artist, container, false);
+        recycler1 = (RecyclerView) rootView.findViewById(R.id.artist1_photos);
+        PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
+        recycler1.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler1.setAdapter(photoAdapter1);
+        return rootView;
     }
 
     @Override

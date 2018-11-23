@@ -35,7 +35,7 @@ public class TabUpcoming extends Fragment  {
     private  String venuename;
     private JSONArray UpcomingEvents = new JSONArray();
     private Spinner sortspinner, ascendspinner;
-    RecyclerView recycler;
+    private RecyclerView recycler;
 
     public TabUpcoming() {
         this.venuename = new String();

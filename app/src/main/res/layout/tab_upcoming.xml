@@ -29,7 +29,6 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:id="@+id/upcominglist">
     </android.support.v7.widget.RecyclerView>
 

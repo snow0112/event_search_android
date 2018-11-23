@@ -115,16 +115,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
-
         String artist2 = new String();
         try {
             artist2 = EventList.getJSONObject(position).getJSONObject("_embedded").getJSONArray("attractions").getJSONObject(1).getString("name");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
 
         final String finalName = name;
         final String finalVenue = venue;
