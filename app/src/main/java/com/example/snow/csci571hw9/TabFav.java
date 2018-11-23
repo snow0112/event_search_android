@@ -37,12 +37,10 @@ public class TabFav extends Fragment {
     private Context context;
     private RecyclerView recycler;
 
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.tab_favorite, container, false);
         recycler = (RecyclerView) rootView.findViewById(R.id.favoriterecycle);
         EventAdapter eventAdapter = new EventAdapter(FavoList, getContext());
@@ -56,12 +54,9 @@ public class TabFav extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         favolist = getActivity().getSharedPreferences("favoritelist",getActivity().MODE_PRIVATE);
         faveditor = favolist.edit();
         FavStringList = favolist.getAll();
-
-        int i = 0;
         for (String key : FavStringList.keySet()){
             String event = getActivity().getSharedPreferences("favoritelist", getActivity().MODE_PRIVATE).getString(key,"nono");
             try {
@@ -73,15 +68,10 @@ public class TabFav extends Fragment {
             }
         }
         FavoList = new JSONArray(favlist);
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       //TextView hello = (TextView) getActivity().findViewById(R.id.favlist);
-       // hello.setText(FavStringList.toString());
-
-
     }
 }

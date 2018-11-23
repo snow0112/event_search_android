@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/upcomingpinner"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".TabUpcoming">
 
     <Spinner
@@ -26,11 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/sortby">
 
-    <LinearLayout
-        android:id="@+id/recyclercoming"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +33,7 @@
         android:id="@+id/upcominglist">
     </android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
+
 </RelativeLayout>
 </RelativeLayout>
 </ScrollView>

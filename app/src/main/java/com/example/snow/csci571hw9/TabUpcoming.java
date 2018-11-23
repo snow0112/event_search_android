@@ -95,7 +95,6 @@ public class TabUpcoming extends Fragment  {
                         UpcomingAdapter upcomingAdapter = new UpcomingAdapter(UpcomingEvents, getContext());
                         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                         recycler.setAdapter(upcomingAdapter);
-
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -183,7 +182,6 @@ public class TabUpcoming extends Fragment  {
 
             }
         });
-
 
     }
 

@@ -73,7 +73,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return UpcomingList.length();
+        return 5;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder{
