@@ -30,6 +30,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class TabUpcoming extends Fragment  {
     private  String venuename;
@@ -139,9 +143,18 @@ public class TabUpcoming extends Fragment  {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
+                        recycler = (RecyclerView) getView().findViewById(R.id.upcominglist);
+                        UpcomingAdapter upcomingAdapter = new UpcomingAdapter(UpcomingEvents, getContext());
+                        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        recycler.setAdapter(upcomingAdapter);
                         ascendspinner.setEnabled(false);
                         break;
                     case 1:
+                        try {
+                            this.SortByName();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         ascendspinner.setEnabled(true);
                         break;
                     case 2:
@@ -157,6 +170,41 @@ public class TabUpcoming extends Fragment  {
                         ascendspinner.setEnabled(true);
                         break;
                 }
+
+            }
+
+            public void SortByName() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));}
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getString("displayName");
+                            val2 = (String) o2.getString("displayName");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return val1.compareTo(val2);
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = (RecyclerView) getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
 
             }
 
@@ -184,5 +232,7 @@ public class TabUpcoming extends Fragment  {
         });
 
     }
+
+
 
 }
