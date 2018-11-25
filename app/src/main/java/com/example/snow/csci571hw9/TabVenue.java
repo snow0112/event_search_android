@@ -31,7 +31,7 @@ import java.net.URLEncoder;
 
 public class TabVenue extends Fragment implements OnMapReadyCallback {
     private  String venuename;
-    private TextView hello;
+
 
     public TabVenue() {
     }
@@ -56,7 +56,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        hello.setText(response.toString());
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -86,8 +86,6 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hello = (TextView) getView().findViewById(R.id.textView4);
-        hello.setText(venuename);
     }
 
     @Override

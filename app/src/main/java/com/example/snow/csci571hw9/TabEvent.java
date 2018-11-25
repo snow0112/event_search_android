@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 public class TabEvent extends Fragment {
     private String event_id;
-    private TextView hello;
+
 
     public TabEvent() {
         this.event_id = new String();
@@ -44,7 +44,7 @@ public class TabEvent extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        hello.setText(response.toString());
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -66,8 +66,7 @@ public class TabEvent extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hello = (TextView) getView().findViewById(R.id.textView);
-        hello.setText(event_id);
+
 
     }
 }

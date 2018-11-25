@@ -68,5 +68,6 @@
     <string name="favorite">favorite</string>
     <string name="twitter" />
     <string name="searching_events">Searching Events ...</string>
+    <string name="atirst_team_s">Atirst/Team(s)</string>
 
 </resources>

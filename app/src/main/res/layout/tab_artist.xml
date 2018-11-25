@@ -109,11 +109,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/atrist1_table">
 
+
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/artist1_photos">
         </android.support.v7.widget.RecyclerView>
+
+
 
     </RelativeLayout>
 

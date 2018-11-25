@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -59,6 +60,7 @@ public class PhotoAdapter  extends RecyclerView.Adapter<PhotoAdapter.ViewHolder>
             e.printStackTrace();
         }
         Picasso.get().load( link ).into(holder.artistphoto);
+        //Glide.with(context).load( link ).into(holder.artistphoto);
     }
 
 
