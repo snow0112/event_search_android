@@ -2,6 +2,8 @@ package com.example.snow.csci571hw9;
 
 import android.annotation.SuppressLint;
 import android.app.usage.UsageEvents;
+import android.content.Intent;
+import android.net.Uri;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,9 +27,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
+
+import static java.lang.Float.parseFloat;
 
 public class TabEvent extends Fragment {
     private String event_id;
@@ -37,8 +42,8 @@ public class TabEvent extends Fragment {
     private TextView category;
     private TextView price;
     private TextView Tickerstatus;
-    private String ticketmaster , seatmap;
-    private TableRow row_artist,row_venue, row_time, row_category, row_, row_price, row_Tickerstatus, row_ticketmaster, row_seatmap;
+    private TextView ticketmaster , seatmap;
+    private TableRow row_artist,row_venue, row_time, row_category, row_price, row_Tickerstatus, row_ticketmaster, row_seatmap;
     private JSONObject EVENT = new JSONObject();
 
 
@@ -65,6 +70,11 @@ public class TabEvent extends Fragment {
                         setartist(EVENT);
                         setvenue(EVENT);
                         settime(EVENT);
+                        setcategory(EVENT);
+                        setprice(EVENT);
+                        setstatus(EVENT);
+                        setticketmaster(EVENT);
+                        setseatmap(EVENT);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -92,6 +102,8 @@ public class TabEvent extends Fragment {
         this.category = getView().findViewById(R.id.event_category);
         this.price = getView().findViewById(R.id.event_price);
         this.Tickerstatus = getView().findViewById(R.id.event_stauts);
+        this.ticketmaster = getView().findViewById(R.id.event_ticketmaster);
+        this.seatmap = getView().findViewById(R.id.event_seatmap);
 
         this.row_artist = getView().findViewById(R.id.event_artist_row);
         this.row_venue = getView().findViewById(R.id.event_venue_row);
@@ -105,6 +117,12 @@ public class TabEvent extends Fragment {
         setartist(EVENT);
         setvenue(EVENT);
         settime(EVENT);
+        setcategory(EVENT);
+        setprice(EVENT);
+        setstatus(EVENT);
+        setticketmaster(EVENT);
+        setseatmap(EVENT);
+
     }
 
     private void setartist(JSONObject EVENT){
@@ -116,7 +134,7 @@ public class TabEvent extends Fragment {
                     String name = Attractions.getJSONObject(i).getString("name");
                     temp += name;
                     if (i < Attractions.length() -1){
-                        temp += "|";
+                        temp += " | ";
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -156,6 +174,89 @@ public class TabEvent extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
             row_time.setVisibility(View.GONE);
+        }
+    }
+    private void setcategory(JSONObject EVENT){
+        try {
+            String temp = "";
+            String segment =  EVENT.getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name");
+            temp += segment;
+            try {
+                String genre =  EVENT.getJSONArray("classifications").getJSONObject(0).getJSONObject("genre").getString("name");
+                temp += " | " + genre;
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            category.setText(temp);
+            row_category.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            row_category.setVisibility(View.GONE);
+        }
+    }
+    private void setprice(JSONObject EVENT){
+        try {
+            String temp = "";
+            String min =  EVENT.getJSONArray("priceRanges").getJSONObject(0).getString("min");
+            String max =  EVENT.getJSONArray("priceRanges").getJSONObject(0).getString("max");
+            DecimalFormat DF = new DecimalFormat("###,##0.00");
+            temp = "$" +min + "~" + "$" + max;
+            min = DF.format(parseFloat(min));
+            max = DF.format(parseFloat(max));
+            temp = "$" + min + " ~ $" +max;
+            price.setText(temp);
+            row_price.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            row_price.setVisibility(View.GONE);
+        }
+    }
+    private void setstatus(JSONObject EVENT){
+        try {
+            String temp = EVENT.getJSONObject("dates").getJSONObject("status").getString("code");
+            Tickerstatus.setText(temp);
+            row_Tickerstatus.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            row_Tickerstatus.setVisibility(View.GONE);
+        }
+    }
+    private void setticketmaster(JSONObject EVENT){
+        try {
+            final String url = this.EVENT.getString("url");
+            ticketmaster.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri webpage = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
+            row_ticketmaster.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            row_ticketmaster.setVisibility(View.GONE);
+        }
+    }
+    private void setseatmap(JSONObject EVENT){
+        try {
+            final String url = this.EVENT.getJSONObject("seatmap").getString("staticUrl");
+            seatmap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri webpage = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
+            row_seatmap.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            row_seatmap.setVisibility(View.GONE);
         }
     }
 
