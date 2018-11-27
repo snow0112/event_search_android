@@ -37,12 +37,12 @@ import static java.lang.Float.parseFloat;
 
 public class TabArtist extends Fragment {
     private String segment_id, artist1, artist2;
-    private TextView atris1_name0,atris1_name,atris1_follower,atris1_popilarity,atris1_url;
-    private String Satris1_name,Satris1_follower,Satris1_popilarity,Satris1_url;
+    private TextView atris1_name0;
+    private TextView atris2_name0;
     private TableLayout artist1_spotify;
-    public JSONObject Artist1_Spotify = new JSONObject();
-    private RecyclerView recycler1;
-    private JSONArray Artist1_Photos = new JSONArray();
+    public JSONObject Artist1_Spotify = new JSONObject(), Artist2_Spotify  = new JSONObject();
+    private RecyclerView recycler1, recycler2;
+    private JSONArray Artist1_Photos = new JSONArray(), Artist2_Photos = new JSONArray();
 
     public TabArtist() {
     }
@@ -59,12 +59,16 @@ public class TabArtist extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(  new String(this.segment_id).equals("KZFzniwnSyZfZ7v7nJ" ) ) {
-            callSpotifyAPI(artist1);
+            callSpotifyAPI(artist1,1);
+            if ( ! new String(artist2).equals("") ){
+            callSpotifyAPI(artist2,2);}
         }
-        callCustomAPI(artist1);
+        callCustomAPI(artist1,1);
+        if ( ! new String(artist2).equals("") ){
+            callCustomAPI(artist2,2);}
     }
 
-    public void callSpotifyAPI(String artist){
+    public void callSpotifyAPI(String artist, final int i){
 
         String url = null;
         try {
@@ -77,12 +81,23 @@ public class TabArtist extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            Artist1_Spotify = response.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
-                            settable(Artist1_Spotify,1);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        if (i == 1){
+                            try {
+                                Artist1_Spotify = response.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
+                                settable(Artist1_Spotify,1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        if (i == 2){
+                            try {
+                                Artist2_Spotify = response.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
+                                settable(Artist2_Spotify,2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
 
                         //hello.setText(response.toString());
                     }
@@ -97,7 +112,7 @@ public class TabArtist extends Fragment {
 
     }
 
-    public void callCustomAPI(String artist){
+    public void callCustomAPI(String artist, final int i){
 
         String url = null;
         try {
@@ -110,12 +125,20 @@ public class TabArtist extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Artist1_Photos = response;
-                        recycler1 = (RecyclerView) getView().findViewById(R.id.artist1_photos);
-                        PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
-                        recycler1.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        recycler1.setAdapter(photoAdapter1);
-                        //hello.setText(response.toString());
+                        if (i == 1){
+                            Artist1_Photos = response;
+                            recycler1 = (RecyclerView) getView().findViewById(R.id.artist1_photos);
+                            PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
+                            recycler1.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            recycler1.setAdapter(photoAdapter1);
+                        }
+                        if(i == 2){
+                            Artist2_Photos = response;
+                            recycler2 = getView().findViewById(R.id.artist2_photos);
+                            PhotoAdapter photoAdapter2 = new PhotoAdapter(Artist2_Photos, getContext());
+                            recycler2.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            recycler2.setAdapter(photoAdapter2);
+                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -132,10 +155,17 @@ public class TabArtist extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_artist, container, false);
-        recycler1 = (RecyclerView) rootView.findViewById(R.id.artist1_photos);
+
+        recycler1 = rootView.findViewById(R.id.artist1_photos);
         PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
         recycler1.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler1.setAdapter(photoAdapter1);
+
+        recycler2 = rootView.findViewById(R.id.artist2_photos);
+        PhotoAdapter photoAdapter2 = new PhotoAdapter(Artist2_Photos, getContext());
+        recycler2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler2.setAdapter(photoAdapter2);
+
         return rootView;
     }
 
@@ -144,11 +174,15 @@ public class TabArtist extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //hello = (TextView) getView().findViewById(R.id.textView3);
         //hello.setText(segment_id+","+artist1+","+artist2);
+
         atris1_name0 = getView().findViewById(R.id.atris1_name0);
         atris1_name0.setText(artist1);
-        artist1_spotify = getView().findViewById(R.id.artist1_spotify);
-
         settable(Artist1_Spotify,1);
+
+        atris2_name0 = getView().findViewById(R.id.atris2_name0);
+        atris2_name0.setText(artist2);
+        settable(Artist2_Spotify,2);
+
 
 
     }
@@ -160,11 +194,22 @@ public class TabArtist extends Fragment {
         TextView atris_popilarity = getView().findViewById(R.id.atris1_popilarity);
         TextView atris_url = getView().findViewById(R.id.atris1_url);
 
-        final TableRow atris_name_row = getView().findViewById(R.id.atris1_name_row);
+        TableRow atris_name_row = getView().findViewById(R.id.atris1_name_row);
         TableRow atris_follower_row = getView().findViewById(R.id.atris1_follower_row);
         TableRow atris_popilarity_row = getView().findViewById(R.id.atris1_popilarity_row);
         TableRow atris_url_row = getView().findViewById(R.id.atris1_url_row);
 
+        if (i == 2){
+            atris_name = getView().findViewById(R.id.atris2_name);
+            atris_follower = getView().findViewById(R.id.atris2_follower);
+            atris_popilarity = getView().findViewById(R.id.atris2_popilarity);
+            atris_url = getView().findViewById(R.id.atris2_url);
+
+            atris_name_row = getView().findViewById(R.id.atris2_name_row);
+            atris_follower_row = getView().findViewById(R.id.atris2_follower_row);
+            atris_popilarity_row = getView().findViewById(R.id.atris2_popilarity_row);
+            atris_url_row = getView().findViewById(R.id.atris2_url_row);
+        }
 
 
         try {

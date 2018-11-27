@@ -3,10 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".TabArtist">
 
     <TextView
@@ -21,7 +22,7 @@
         android:id="@+id/atrist1_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/atris1_name0">
+        >
 
     <TableLayout
         android:id="@+id/artist1_spotify"
@@ -112,9 +113,10 @@
 
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/atrist1_recycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/atrist1_table">
+        >
 
 
         <android.support.v7.widget.RecyclerView
@@ -127,7 +129,122 @@
 
     </RelativeLayout>
 
+    <TextView
+    android:id="@+id/atris2_name0"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/name"
+    android:textStyle="bold"
+    android:gravity="center_horizontal"/>
+
+    <RelativeLayout
+        android:id="@+id/atrist2_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableLayout
+            android:id="@+id/artist2_spotify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:padding="2dp"
+            >
+
+            <TableRow
+                android:id="@+id/atris2_name_row"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"
+                    android:text="@string/name"/>
+                <TextView
+                    android:id="@+id/atris2_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/atris2_follower_row"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"
+                    android:text="@string/followers"/>
+                <TextView
+                    android:id="@+id/atris2_follower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/atris2_popilarity_row"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"
+                    android:text="@string/popularity"/>
+                <TextView
+                    android:id="@+id/atris2_popilarity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/atris2_url_row"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:textStyle="bold"
+                    android:text="@string/check_at"/>
+                <TextView
+                    android:id="@+id/atris2_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/spotify"/>
+            </TableRow>
+        </TableLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/artist2_photos">
+        </android.support.v7.widget.RecyclerView>
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
 </ScrollView>

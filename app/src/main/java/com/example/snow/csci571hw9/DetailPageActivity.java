@@ -222,7 +222,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
                     TabEvent tabEvent = new TabEvent(event_id);
                     return tabEvent;
                 case 1:
-                    TabArtist tabArtist = new TabArtist(segment_id,artist1,artist1);
+                    TabArtist tabArtist = new TabArtist(segment_id,artist1,artist2);
                     return tabArtist;
                 case 2:
                     TabVenue tabVenue = new TabVenue(venuename);
