@@ -11,8 +11,6 @@
 
 
     <TableLayout
-        android:id="@+id/artist1_spotify"
-        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -21,6 +19,8 @@
         >
 
         <TableRow
+            android:id="@+id/row_venue_name"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -39,6 +39,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/row_venue_address"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -56,6 +58,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/row_venue_city"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -73,6 +77,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/row_venue_phone"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -90,6 +96,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/row_venue_hours"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -107,6 +115,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/row_venue_rule"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -124,6 +134,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/row_venue_child"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -141,6 +153,11 @@
         </TableRow>
 
     </TableLayout>
+
+        <TextView
+            android:id="@+id/venue_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
     <com.google.android.gms.maps.MapView
