@@ -101,6 +101,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
         holder.venuename.setText(venue);
 
+        String date = new String();
+        try {
+            date = EventList.getJSONObject(position).getJSONObject("dates").getJSONObject("start").getString("localDate");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.eventdate.setText(date);
+
+        String time = new String();
+        try {
+            time = EventList.getJSONObject(position).getJSONObject("dates").getJSONObject("start").getString("localTime");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.eventtime.setText(time);
+
         String eventid = new String();
         try {
             eventid = EventList.getJSONObject(position).getString("id");
@@ -122,6 +138,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
+        String eventurl = new String();
+        try {
+            eventurl = EventList.getJSONObject(position).getString("url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         final String finalName = name;
         final String finalVenue = venue;
         final String finalId = eventid;
@@ -129,6 +152,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final String finalArtist1 = artist1;
         final String finalCate = cate;
         final String finalevent = event.toString();
+        final String finalEventurl = eventurl;
 
         holder.eventitem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +170,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     detailpage.putExtra("artist2", finalArtist2);
                     detailpage.putExtra("segment_id", finalCate);
                     detailpage.putExtra("eventstring", finalevent);
+                    detailpage.putExtra("eventurl", finalEventurl);
                     context.startActivity (detailpage);
                 } catch (Exception e) { }
 
@@ -192,17 +217,21 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         public TextView eventname;
         public TextView venuename;
+        public TextView eventdate;
+        public TextView eventtime;
         public ImageView category;
         public ImageView favoriteresult;
         public RelativeLayout eventitem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            eventname = (TextView) itemView.findViewById(R.id.eventname);
-            venuename = (TextView) itemView.findViewById(R.id.venuename);
-            category = (ImageView) itemView.findViewById(R.id.category);
-            favoriteresult = (ImageView) itemView.findViewById(R.id.favoriteresult);
-            eventitem = (RelativeLayout) itemView.findViewById(R.id.eventitem);
+            eventname = itemView.findViewById(R.id.eventname);
+            venuename = itemView.findViewById(R.id.venuename);
+            eventdate = itemView.findViewById(R.id.date);
+            eventtime = itemView.findViewById(R.id.time);
+            category = itemView.findViewById(R.id.category);
+            favoriteresult = itemView.findViewById(R.id.favoriteresult);
+            eventitem = itemView.findViewById(R.id.eventitem);
         }
     }
 

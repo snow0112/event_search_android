@@ -17,6 +17,8 @@
         >
 
         <TableRow
+            android:id="@+id/event_artist_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -35,6 +37,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_venue_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -52,6 +56,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_time_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -69,6 +75,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_category_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -86,6 +94,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_price_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -103,6 +113,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_stauts_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -120,6 +132,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_ticketmaster_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">
@@ -137,6 +151,8 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/event_seatmap_row"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="2dp">

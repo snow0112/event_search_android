@@ -55,7 +55,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private String event_name, event_id, venuename, artist1,artist2, segment_id,eventstring;
+    private String event_name, event_id, venuename, artist1,artist2, segment_id,eventstring, eventurl;
     public SharedPreferences favolist;
     public static SharedPreferences.Editor faveditor;
 
@@ -72,6 +72,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         artist2 = inputsource.getStringExtra("artist2");
         segment_id = inputsource.getStringExtra("segment_id");
         eventstring = inputsource.getStringExtra("eventstring");
+        eventurl = inputsource.getStringExtra("eventurl");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setNavigationIcon();
@@ -91,10 +92,6 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
 
         favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
         faveditor = favolist.edit();
-
-
-
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -135,8 +132,6 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_favorite :
-
-
                 if ( favolist.contains(event_id) ){
                     SearchResultActivity.faveditor.remove(event_id);
                     SearchResultActivity.faveditor.commit();
@@ -151,7 +146,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
                 return true;
             case R.id.action_twitter :
                 //Toast.makeText(this, "twitter" ,Toast.LENGTH_SHORT).show();
-                String tweettext = "Check out " + event_name + " located at " + venuename +". Website: " + "eventurl";
+                String tweettext = "Check out " + event_name + " located at " + venuename +". Website: " + eventurl;
                 String url = "https://twitter.com/intent/tweet?text="+tweettext+"&hashtags=CSCI571EventSearch";
                 Uri webpage = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
