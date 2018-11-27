@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,16 +26,21 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
+
+import static java.lang.Float.parseFloat;
 
 public class TabArtist extends Fragment {
     private String segment_id, artist1, artist2;
     private TextView atris1_name0,atris1_name,atris1_follower,atris1_popilarity,atris1_url;
     private String Satris1_name,Satris1_follower,Satris1_popilarity,Satris1_url;
-    public JSONObject Artist1_Spotify;
+    private TableLayout artist1_spotify;
+    public JSONObject Artist1_Spotify = new JSONObject();
     private RecyclerView recycler1;
     private JSONArray Artist1_Photos = new JSONArray();
 
@@ -70,7 +77,13 @@ public class TabArtist extends Fragment {
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Artist1_Spotify = response;
+                        try {
+                            Artist1_Spotify = response.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
+                            settable(Artist1_Spotify,1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         //hello.setText(response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -131,21 +144,74 @@ public class TabArtist extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //hello = (TextView) getView().findViewById(R.id.textView3);
         //hello.setText(segment_id+","+artist1+","+artist2);
-        atris1_name0 = (TextView) getView().findViewById(R.id.atris1_name0);
+        atris1_name0 = getView().findViewById(R.id.atris1_name0);
         atris1_name0.setText(artist1);
-        atris1_url = (TextView) getView().findViewById(R.id.atris1_url);;
+        artist1_spotify = getView().findViewById(R.id.artist1_spotify);
 
-        atris1_url.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://open.spotify.com/artist/66CXWjxzNUsdJxJ2JdwvnR";
-                Uri webpage = Uri.parse(url);
-                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                }
-            }
-        });
+        settable(Artist1_Spotify,1);
+
 
     }
+
+    private void settable(JSONObject Artist_Spotify, int i){
+
+        TextView atris_name = getView().findViewById(R.id.atris1_name);
+        TextView atris_follower = getView().findViewById(R.id.atris1_follower);
+        TextView atris_popilarity = getView().findViewById(R.id.atris1_popilarity);
+        TextView atris_url = getView().findViewById(R.id.atris1_url);
+
+        final TableRow atris_name_row = getView().findViewById(R.id.atris1_name_row);
+        TableRow atris_follower_row = getView().findViewById(R.id.atris1_follower_row);
+        TableRow atris_popilarity_row = getView().findViewById(R.id.atris1_popilarity_row);
+        TableRow atris_url_row = getView().findViewById(R.id.atris1_url_row);
+
+
+
+        try {
+            String temp = Artist_Spotify.getString("name");
+            atris_name.setText(temp);
+            atris_name_row.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            atris_name_row.setVisibility(View.GONE);
+        }
+
+        try {
+            String temp = Artist_Spotify.getJSONObject("followers").getString("total");
+            DecimalFormat DF = new DecimalFormat("###,###");
+            temp = DF.format(parseFloat(temp));
+            atris_follower.setText(temp);
+            atris_follower_row.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            atris_follower_row.setVisibility(View.GONE);
+        }
+
+        try {
+            String temp = Artist_Spotify.getString("popularity");
+            atris_popilarity.setText(temp);
+            atris_popilarity_row.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            atris_popilarity_row.setVisibility(View.GONE);
+        }
+
+        try {
+            final String url = Artist_Spotify.getJSONObject("external_urls").getString("spotify");
+            atris_url.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri webpage = Uri.parse(url);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivity(intent);
+                    }}});
+            atris_url_row.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            atris_url_row.setVisibility(View.GONE);
+        }
+
+    }
+
 }

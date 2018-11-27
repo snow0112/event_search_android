@@ -200,7 +200,6 @@ public class TabEvent extends Fragment {
             String min =  EVENT.getJSONArray("priceRanges").getJSONObject(0).getString("min");
             String max =  EVENT.getJSONArray("priceRanges").getJSONObject(0).getString("max");
             DecimalFormat DF = new DecimalFormat("###,##0.00");
-            temp = "$" +min + "~" + "$" + max;
             min = DF.format(parseFloat(min));
             max = DF.format(parseFloat(max));
             temp = "$" + min + " ~ $" +max;
