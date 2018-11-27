@@ -53,7 +53,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        String name = new String();
+        String name = "";
         try {
             name = UpcomingList.getJSONObject(position).getString("displayName");
         } catch (JSONException e) {
@@ -61,7 +61,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         }
         holder.upcoming_eventname.setText(name);
 
-        String artist = new String();
+        String artist = "";
         try {
             artist = UpcomingList.getJSONObject(position).getJSONArray("performance").getJSONObject(0).getString("displayName");
         } catch (JSONException e) {
@@ -69,7 +69,9 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         }
         holder.upcoming_artist.setText( artist);
 
-        String dataandtime = new String();
+        String dataandtime = "";
+        String time_temp = "";
+
         try {
             String date_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("date");
             try {
@@ -77,16 +79,20 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            String time_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("time");
-            dataandtime = date_temp + "  " + time_temp;
+            dataandtime += date_temp;
+            time_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("time");
+            if ( time_temp != null ){
+            dataandtime += "  " + time_temp;}
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         holder.upcoming_time.setText(dataandtime);
 
-        String type = new String();
+        String type = "";
         try {
-            type = "Type: " + UpcomingList.getJSONObject(position).getString("type");
+            type = "Type: " + UpcomingList.getJSONObject(position).getString("");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -158,17 +158,30 @@ public class TabUpcoming extends Fragment  {
                         ascendspinner.setEnabled(true);
                         break;
                     case 2:
+                        try {
+                            this.SortByTime();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         ascendspinner.setEnabled(true);
                         break;
                     case 3:
+                        try {
+                            this.SortByArtist();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         ascendspinner.setEnabled(true);
                         break;
                     case 4:
+                        try {
+                            this.SortByType();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         ascendspinner.setEnabled(true);
                         break;
-                    case 5:
-                        ascendspinner.setEnabled(true);
-                        break;
+
                 }
 
             }
@@ -179,7 +192,6 @@ public class TabUpcoming extends Fragment  {
                 for(int i = 0; i <UpcomingEvents.length(); i++){
                     Upcomings.add(UpcomingEvents.getJSONObject(i));
                 }
-
                 final String order =ascendspinner.getSelectedItem().toString();
 
                 Collections.sort(Upcomings, new Comparator<JSONObject>(
@@ -215,6 +227,133 @@ public class TabUpcoming extends Fragment  {
 
 
             }
+
+            public void SortByTime() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getJSONObject("start").getString("datetime");
+                            val2 = (String) o2.getJSONObject("start").getString("datetime");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
+
+            }
+
+            public void SortByArtist() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getJSONArray("performance").getJSONObject(0).getString("displayName");
+                            val2 = (String) o2.getJSONArray("performance").getJSONObject(0).getString("displayName");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
+
+            }
+
+            public void SortByType() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getString("type");
+                            val2 = (String) o2.getString("type");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
+
+            }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
