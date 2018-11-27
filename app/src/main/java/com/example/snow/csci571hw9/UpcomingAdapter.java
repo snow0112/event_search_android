@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHolder> {
 
     private JSONArray UpcomingList;
@@ -57,6 +60,37 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             e.printStackTrace();
         }
         holder.upcoming_eventname.setText(name);
+
+        String artist = new String();
+        try {
+            artist = UpcomingList.getJSONObject(position).getJSONArray("performance").getJSONObject(0).getString("displayName");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.upcoming_artist.setText( artist);
+
+        String dataandtime = new String();
+        try {
+            String date_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("date");
+            try {
+                date_temp = new SimpleDateFormat("MMM dd, yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(date_temp));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String time_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("time");
+            dataandtime = date_temp + "  " + time_temp;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.upcoming_time.setText(dataandtime);
+
+        String type = new String();
+        try {
+            type = "Type: " + UpcomingList.getJSONObject(position).getString("type");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.upcoming_type.setText(type);
 
         String uri = new String();
         try {

@@ -143,7 +143,7 @@ public class TabUpcoming extends Fragment  {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        recycler = (RecyclerView) getView().findViewById(R.id.upcominglist);
+                        recycler = getView().findViewById(R.id.upcominglist);
                         UpcomingAdapter upcomingAdapter = new UpcomingAdapter(UpcomingEvents, getContext());
                         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                         recycler.setAdapter(upcomingAdapter);
@@ -177,7 +177,10 @@ public class TabUpcoming extends Fragment  {
 
                 List<JSONObject> Upcomings = new ArrayList<JSONObject>();
                 for(int i = 0; i <UpcomingEvents.length(); i++){
-                    Upcomings.add(UpcomingEvents.getJSONObject(i));}
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+
+                final String order =ascendspinner.getSelectedItem().toString();
 
                 Collections.sort(Upcomings, new Comparator<JSONObject>(
                 ) {
@@ -191,7 +194,12 @@ public class TabUpcoming extends Fragment  {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        return val1.compareTo(val2);
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
                     }
                 });
 
@@ -200,7 +208,7 @@ public class TabUpcoming extends Fragment  {
                     sortedUpcomingEvents.put(Upcomings.get(i));
                 }
 
-                recycler = (RecyclerView) getView().findViewById(R.id.upcominglist);
+                recycler = getView().findViewById(R.id.upcominglist);
                 UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
                 recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recycler.setAdapter(upcomingAdapter);
