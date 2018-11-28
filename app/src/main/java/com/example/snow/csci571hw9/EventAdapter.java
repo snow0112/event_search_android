@@ -194,7 +194,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
                 //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
                 if ( favolist.contains(finalId) ){
-                    Toast.makeText(context, finalName + "is removed from favorite", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, finalName + " is removed from favorite", Toast.LENGTH_SHORT).show();
                     faveditor.remove(finalId);
                     faveditor.commit();
                     if (Source == 0){
@@ -205,7 +205,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
                     notifyDataSetChanged();
                 }else{
-                    Toast.makeText(context, finalName + "is added to favorite", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, finalName + " is added to favorite", Toast.LENGTH_SHORT).show();
                     faveditor.putString(finalId,finalevent);
                     faveditor.commit();
                     holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);

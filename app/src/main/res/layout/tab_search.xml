@@ -14,11 +14,22 @@
         android:layout_marginRight="10dp"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff0000"
+        android:visibility="gone"
+        android:text="Please enter mandatory field"
+        android:layout_below="@+id/textView1"
+        android:id="@+id/keyword_validation"
+        android:textSize="20sp"
+        android:layout_marginLeft="10dp"/>
+
     <AutoCompleteTextView
         android:id="@+id/keyword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView1"
+        android:layout_below="@id/keyword_validation"
         android:hint="@string/enter_keyword"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"/>
@@ -112,11 +123,22 @@
             />
     </RadioGroup>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff0000"
+        android:visibility="gone"
+        android:text="Please enter mandatory field"
+        android:layout_below="@+id/from"
+        android:id="@+id/specifylocation_validation"
+        android:textSize="20sp"
+        android:layout_marginLeft="40dp"/>
+
     <EditText
         android:id="@+id/specifylocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/from"
+        android:layout_below="@+id/specifylocation_validation"
         android:layout_alignParentStart="true"
         android:ems="10"
         android:hint="@string/type_in_the_location"

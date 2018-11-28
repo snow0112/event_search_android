@@ -41,6 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ObjectInputValidation;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -101,9 +102,6 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
 
     }
 
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,20 +122,20 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
     unitadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     unitspinner.setAdapter(unitadapter);
 
-        keyword = (AutoCompleteTextView) getView().findViewById(R.id.keyword);
+    keyword = (AutoCompleteTextView) getView().findViewById(R.id.keyword);
 
-        category = (Spinner) getView().findViewById(R.id.category);
-        radius = (EditText) getView().findViewById(R.id.radius);
-        unit = (Spinner) getView().findViewById(R.id.unit);
+    category = (Spinner) getView().findViewById(R.id.category);
+    radius = (EditText) getView().findViewById(R.id.radius);
+    unit = (Spinner) getView().findViewById(R.id.unit);
 
-        here = (RadioButton) getView().findViewById(R.id.here);
-        there = (RadioButton) getView().findViewById(R.id.there);
-        from = (RadioGroup) getView().findViewById(R.id.from);
-        specifylocation = (EditText) getView().findViewById(R.id.specifylocation);
-        search = (Button) getView().findViewById(R.id.search);
-        clear = (Button) getView().findViewById(R.id.clear);
+    here = (RadioButton) getView().findViewById(R.id.here);
+    there = (RadioButton) getView().findViewById(R.id.there);
+    from = (RadioGroup) getView().findViewById(R.id.from);
+    specifylocation = (EditText) getView().findViewById(R.id.specifylocation);
+    search = (Button) getView().findViewById(R.id.search);
+    clear = (Button) getView().findViewById(R.id.clear);
 
-        clear.setOnClickListener(new View.OnClickListener() {
+    clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 keyword.getText().clear();
@@ -148,12 +146,21 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 there.setChecked(false);
                 category.setSelection(0);
                 unit.setSelection(0);
+                TextView keyword_validation = getView().findViewById(R.id.keyword_validation);
+                keyword_validation.setVisibility(View.GONE);
+                TextView specifylocation_validation = getView().findViewById(R.id.specifylocation_validation);
+                specifylocation_validation.setVisibility(View.GONE);
             }
         });
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView keyword_validation = getView().findViewById(R.id.keyword_validation);
+                keyword_validation.setVisibility(View.GONE);
+                TextView specifylocation_validation = getView().findViewById(R.id.specifylocation_validation);
+                specifylocation_validation.setVisibility(View.GONE);
+
                 key = keyword.getText().toString();
                 try {
                     key = URLEncoder.encode(key,"UTF-8");
@@ -175,6 +182,17 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
 
 
                 if ( new String(fromm).equals("Other, Specify Location") ){
+                    //validation check for both key and location
+                    if (new String(key).equals("") || key == null || new String(speclox).equals("") || speclox == null){
+                        Toast.makeText(getActivity(), "Please fix all fields with errors" ,Toast.LENGTH_SHORT).show();
+                        if (new String(key).equals("") || key == null){
+                            keyword_validation.setVisibility(View.VISIBLE);}
+                        if (new String(speclox).equals("") || speclox == null){
+                            specifylocation_validation.setVisibility(View.VISIBLE);}
+                        return;
+                    }
+
+
                     try {
                         String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/address-find/" +URLEncoder.encode(speclox,"UTF-8") ;
                         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -186,11 +204,9 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             JSONObject loc = response.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
                                             double specifylat = loc.getDouble("lat");
                                             double specifylon = loc.getDouble("lng");
-                                            //Log.d("132", String.valueOf(specifylat));
-                                            //Log.d("133", String.valueOf(specifylon));
                                             specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,9);
                                             forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
-                                            Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_LONG).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -199,7 +215,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d("error","Volley Error");
-                                        // TODO: Handle error
+                                        Toast.makeText(getActivity(), "error! can't get geohash from specified locaiotn" ,Toast.LENGTH_LONG).show();
                                     }
                                 });
                         queue.add(addresslocation);
@@ -207,8 +223,13 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                         e.printStackTrace();
                     }
                 } else{
+                    // validation check for keyword
+                    if (new String(key).equals("") || key == null){
+                        Toast.makeText(getActivity(), "Please fix all fields with errors" ,Toast.LENGTH_SHORT).show();
+                        keyword_validation.setVisibility(View.VISIBLE);
+                        return;
+                    }
                     forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
-                    Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_SHORT).show();
                 }
 
                 // open nwe activity
@@ -219,11 +240,29 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
             }
         });
 
+        specifylocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView keyword_validation = getView().findViewById(R.id.specifylocation_validation);
+                keyword_validation.setVisibility(View.GONE);
+            }
+        });
+
+        keyword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView keyword_validation = getView().findViewById(R.id.keyword_validation);
+                keyword_validation.setVisibility(View.GONE);
+            }
+        });
+
         here.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 specifylocation.setEnabled(false);
                 specifylocation.getText().clear();
+                TextView keyword_validation = getView().findViewById(R.id.specifylocation_validation);
+                keyword_validation.setVisibility(View.GONE);
             }
         });
 
