@@ -82,7 +82,8 @@ public class SearchResultActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            ERRORtoast();
+                            RelativeLayout no_result_message = findViewById(R.id.no_result_message_search);
+                            no_result_message.setVisibility(View.VISIBLE);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -91,6 +92,8 @@ public class SearchResultActivity extends AppCompatActivity {
                         Log.d("error","Volley Error");
                         RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
                         pb.setVisibility(View.INVISIBLE);
+                        RelativeLayout no_result_message = findViewById(R.id.no_result_message_search);
+                        no_result_message.setVisibility(View.VISIBLE);
                         ERRORtoast();
                     }
                 });

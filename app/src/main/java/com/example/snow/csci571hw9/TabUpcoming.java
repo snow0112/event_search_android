@@ -40,7 +40,7 @@ public class TabUpcoming extends Fragment  {
     private JSONArray UpcomingEvents = new JSONArray();
     private Spinner sortspinner, ascendspinner;
     private RecyclerView recycler;
-    private Boolean pb;
+    private Boolean pb, NR;
 
     public TabUpcoming() {
         this.venuename = new String();
@@ -55,6 +55,7 @@ public class TabUpcoming extends Fragment  {
         super.onCreate(savedInstanceState);
 
         pb = false;
+        NR = false;
         String url = null;
         try {
             url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/songkick-venueID/"+URLEncoder.encode( venuename,"UTF-8");
@@ -74,6 +75,9 @@ public class TabUpcoming extends Fragment  {
                         pb = true;
                         RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
                         progressbar.setVisibility(View.GONE);
+                        NR = true;
+                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_upcoming);
+                        no_result_message.setVisibility(View.VISIBLE);
                         Toast.makeText(getActivity(), "error! can't find upcoming event" ,Toast.LENGTH_LONG).show();
                     }
                 });
@@ -112,6 +116,9 @@ public class TabUpcoming extends Fragment  {
                         pb = true;
                         RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
                         progressbar.setVisibility(View.GONE);
+                        NR = true;
+                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_upcoming);
+                        no_result_message.setVisibility(View.VISIBLE);
                         Toast.makeText(getActivity(), "error! can't find upcoming event" ,Toast.LENGTH_LONG).show();
                     }
                 });
@@ -138,6 +145,11 @@ public class TabUpcoming extends Fragment  {
         if (pb){
             RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
             progressbar.setVisibility(View.GONE);
+        }
+
+        if (NR){
+            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_upcoming);
+            no_result_message.setVisibility(View.VISIBLE);
         }
 
         sortspinner = getView().findViewById(R.id.sortby);

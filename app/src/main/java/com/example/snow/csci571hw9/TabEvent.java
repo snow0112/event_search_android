@@ -47,7 +47,7 @@ public class TabEvent extends Fragment {
     private TextView ticketmaster , seatmap;
     private TableRow row_artist,row_venue, row_time, row_category, row_price, row_Tickerstatus, row_ticketmaster, row_seatmap;
     private JSONObject EVENT = new JSONObject();
-    private Boolean pb;
+    private Boolean pb, NR;
 
 
     public TabEvent() {
@@ -63,6 +63,7 @@ public class TabEvent extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        NR = false;
         pb = false;
         String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-event/" +event_id ;
         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -92,6 +93,9 @@ public class TabEvent extends Fragment {
                         RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
                         progressbar.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "error" ,Toast.LENGTH_LONG).show();
+                        NR = true;
+                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_event);
+                        no_result_message.setVisibility(View.VISIBLE);
                     }
                 });
         queue.add(addresslocation);
@@ -138,6 +142,12 @@ public class TabEvent extends Fragment {
         if (pb){
             RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
             progressbar.setVisibility(View.GONE);
+        }
+
+        if(NR){
+            NR = true;
+            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_event);
+            no_result_message.setVisibility(View.VISIBLE);
         }
 
     }

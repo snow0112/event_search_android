@@ -30,6 +30,21 @@
         android:text="Searching..."
         android:visibility="visible" />
 </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:id="@+id/no_result_message_event">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="no result"/>
+
+    </RelativeLayout>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"

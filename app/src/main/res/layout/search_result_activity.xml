@@ -48,13 +48,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:id="@+id/no_result_message">
+        android:visibility="gone"
+        android:id="@+id/no_result_message_search">
 
     <TextView
         android:id="@+id/eventnoresult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:gravity="center"
         android:text="no result"/>
 

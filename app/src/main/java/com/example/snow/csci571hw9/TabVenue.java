@@ -38,7 +38,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     private TextView name, address, city, phone, hours, rule, childrule;
     private TableRow row_name, row_address, row_city, row_phone, row_hours, row_rule, row_childrule;
     private JSONObject VENUE = new JSONObject();
-    private Boolean pb;
+    private Boolean pb, NR;
     private String lat, lon;
 
 
@@ -55,7 +55,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
 
         pb = false;
-
+        NR = false;
         String url = null;
         try {
             url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-venue/"+URLEncoder.encode( venuename,"UTF-8");
@@ -74,6 +74,9 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
                             VENUE = response.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            NR = true;
+                            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
+                            no_result_message.setVisibility(View.VISIBLE);
                         }
                         setName(VENUE);
                         setAddress(VENUE);
@@ -92,6 +95,9 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
                         RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
                         progressbar.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "error! can't find venue detail" ,Toast.LENGTH_LONG).show();
+                        NR = true;
+                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
+                        no_result_message.setVisibility(View.VISIBLE);
                     }
                 });
         queue.add(addresslocation);
@@ -140,7 +146,10 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
             RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
             progressbar.setVisibility(View.GONE);
         }
-
+        if (NR){
+            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
+            no_result_message.setVisibility(View.VISIBLE);
+        }
         setlocation(VENUE);
 
     }

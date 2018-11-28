@@ -46,7 +46,7 @@ public class TabArtist extends Fragment {
     public JSONObject Artist1_Spotify = new JSONObject(), Artist2_Spotify  = new JSONObject();
     private RecyclerView recycler1, recycler2;
     private JSONArray Artist1_Photos = new JSONArray(), Artist2_Photos = new JSONArray();
-    private Boolean pba1_spotify, pba2_spotify, pba1_photo, pba2_photo;
+    private Boolean pba1_spotify, pba2_spotify, pba1_photo, pba2_photo, NR1, NR2;
 
     public TabArtist() {
     }
@@ -61,6 +61,9 @@ public class TabArtist extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NR1 = false;
+        NR2 = false;
 
         pba1_spotify = true;
         pba2_spotify = true;
@@ -155,23 +158,31 @@ public class TabArtist extends Fragment {
                     public void onResponse(JSONArray response) {
                         if (i == 1){
                             pba1_photo = true;
-                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist1);
-                            progressbar.setVisibility(View.GONE);
+                            hide_photo_progressbar_1();
                             Artist1_Photos = response;
                             recycler1 = (RecyclerView) getView().findViewById(R.id.artist1_photos);
                             PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
                             recycler1.setLayoutManager(new LinearLayoutManager(getActivity()));
                             recycler1.setAdapter(photoAdapter1);
+                            if (Artist1_Photos.length() == 0){
+                                NR1 = true;
+                                TextView no_result_message = getView().findViewById(R.id.no_result_message_photo1);
+                                no_result_message.setVisibility(View.VISIBLE);
+                            }
                         }
                         if(i == 2){
                             pba2_photo = true;
-                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
-                            progressbar.setVisibility(View.GONE);
+                            hide_photo_progressbar_2();
                             Artist2_Photos = response;
                             recycler2 = getView().findViewById(R.id.artist2_photos);
                             PhotoAdapter photoAdapter2 = new PhotoAdapter(Artist2_Photos, getContext());
                             recycler2.setLayoutManager(new LinearLayoutManager(getActivity()));
                             recycler2.setAdapter(photoAdapter2);
+                            if (Artist2_Photos.length() == 0){
+                                NR2 = true;
+                                TextView no_result_message = getView().findViewById(R.id.no_result_message_photo2);
+                                no_result_message.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -182,20 +193,41 @@ public class TabArtist extends Fragment {
                         //Toast.makeText(getActivity(), "error" ,Toast.LENGTH_LONG).show();
                         if (i == 1){
                             pba1_photo = true;
-                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist1);
-                            progressbar.setVisibility(View.GONE);
+                            hide_photo_progressbar_1();
+                            NR1 = true;
+                            TextView no_result_message = getView().findViewById(R.id.no_result_message_photo1);
+                            no_result_message.setVisibility(View.VISIBLE);
                             Toast.makeText(getActivity(), "error! can't find artist's photo" ,Toast.LENGTH_LONG).show();
                         }
                         if(i == 2){
                             pba2_photo = true;
-                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
-                            progressbar.setVisibility(View.GONE);
+                            hide_photo_progressbar_2();
+                            NR2 = true;
+                            TextView no_result_message = getView().findViewById(R.id.no_result_message_photo2);
+                            no_result_message.setVisibility(View.VISIBLE);
                             Toast.makeText(getActivity(), "error! can't find artist's photo" ,Toast.LENGTH_LONG).show();
                         }
                     }
                 });
         queue.add(photos);
 
+    }
+
+    private void hide_photo_progressbar_1() {
+        try {
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist1);
+            progressbar.setVisibility(View.GONE);
+        }catch (NullPointerException e){
+            //hide_photo_progressbar_1();
+        }
+    }
+    private void hide_photo_progressbar_2() {
+        try {
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
+            progressbar.setVisibility(View.GONE);
+        }catch (NullPointerException e){
+           // hide_photo_progressbar_1();
+        }
     }
 
     @Nullable
@@ -241,7 +273,16 @@ public class TabArtist extends Fragment {
             progressbar.setVisibility(View.GONE); }
         if (pba2_photo){
             RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
-            progressbar.setVisibility(View.GONE);}
+            progressbar.setVisibility(View.GONE); }
+
+        if(NR1){
+            TextView no_result_message = getView().findViewById(R.id.no_result_message_photo1);
+            no_result_message.setVisibility(View.VISIBLE);
+        }
+        if(NR2){
+            TextView no_result_message = getView().findViewById(R.id.no_result_message_photo2);
+            no_result_message.setVisibility(View.VISIBLE);
+        }
 
 
 
