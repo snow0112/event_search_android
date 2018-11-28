@@ -81,6 +81,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             }
             dataandtime += date_temp;
             time_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("time");
+
             if ( time_temp != null ){
             dataandtime += "  " + time_temp;}
 
@@ -92,7 +93,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
 
         String type = "";
         try {
-            type = "Type: " + UpcomingList.getJSONObject(position).getString("");
+            type = "Type: " + UpcomingList.getJSONObject(position).getString("type");
         } catch (JSONException e) {
             e.printStackTrace();
         }

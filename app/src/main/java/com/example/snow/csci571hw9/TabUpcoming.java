@@ -14,14 +14,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -186,7 +185,7 @@ public class TabUpcoming extends Fragment  {
 
             }
 
-            public void SortByName() throws JSONException {
+            private void SortByName() throws JSONException {
 
                 List<JSONObject> Upcomings = new ArrayList<JSONObject>();
                 for(int i = 0; i <UpcomingEvents.length(); i++){
@@ -211,7 +210,6 @@ public class TabUpcoming extends Fragment  {
                         }else{
                             return -val1.compareTo(val2);
                         }
-
                     }
                 });
 
@@ -219,16 +217,13 @@ public class TabUpcoming extends Fragment  {
                 for (int i = 0; i < UpcomingEvents.length(); i++ ){
                     sortedUpcomingEvents.put(Upcomings.get(i));
                 }
-
                 recycler = getView().findViewById(R.id.upcominglist);
                 UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
                 recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recycler.setAdapter(upcomingAdapter);
-
-
             }
 
-            public void SortByTime() throws JSONException {
+            private void SortByTime() throws JSONException {
 
                 List<JSONObject> Upcomings = new ArrayList<JSONObject>();
                 for(int i = 0; i <UpcomingEvents.length(); i++){
@@ -270,7 +265,7 @@ public class TabUpcoming extends Fragment  {
 
             }
 
-            public void SortByArtist() throws JSONException {
+            private void SortByArtist() throws JSONException {
 
                 List<JSONObject> Upcomings = new ArrayList<JSONObject>();
                 for(int i = 0; i <UpcomingEvents.length(); i++){
@@ -312,7 +307,7 @@ public class TabUpcoming extends Fragment  {
 
             }
 
-            public void SortByType() throws JSONException {
+            private void SortByType() throws JSONException {
 
                 List<JSONObject> Upcomings = new ArrayList<JSONObject>();
                 for(int i = 0; i <UpcomingEvents.length(); i++){
@@ -354,10 +349,8 @@ public class TabUpcoming extends Fragment  {
 
             }
 
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -366,10 +359,212 @@ public class TabUpcoming extends Fragment  {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
+                        Sortagain();
                         break;
                     case 1:
+                        Sortagain();
                         break;
                 }
+            }
+
+            private void Sortagain(){
+                int position = sortspinner.getSelectedItemPosition();
+                if (position == 1){
+                    //Toast.makeText(getActivity(), "Event Name", Toast.LENGTH_SHORT).show();
+                    try {
+                        SortByName();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (position == 2){
+                    //Toast.makeText(getActivity(), "Time", Toast.LENGTH_SHORT).show();
+                    try {
+                        SortByTime();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (position == 3){
+                    //Toast.makeText(getActivity(), "Artist", Toast.LENGTH_SHORT).show();
+                    try {
+                        SortByArtist();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (position == 4){
+                    //Toast.makeText(getActivity(), "Type", Toast.LENGTH_SHORT).show();
+                    try {
+                        SortByType();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            private void SortByName() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getString("displayName");
+                            val2 = (String) o2.getString("displayName");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+            }
+
+            private void SortByTime() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getJSONObject("start").getString("datetime");
+                            val2 = (String) o2.getJSONObject("start").getString("datetime");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
+
+            }
+
+            private void SortByArtist() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getJSONArray("performance").getJSONObject(0).getString("displayName");
+                            val2 = (String) o2.getJSONArray("performance").getJSONObject(0).getString("displayName");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
+
+            }
+
+            private void SortByType() throws JSONException {
+
+                List<JSONObject> Upcomings = new ArrayList<JSONObject>();
+                for(int i = 0; i <UpcomingEvents.length(); i++){
+                    Upcomings.add(UpcomingEvents.getJSONObject(i));
+                }
+                final String order =ascendspinner.getSelectedItem().toString();
+
+                Collections.sort(Upcomings, new Comparator<JSONObject>(
+                ) {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        String val1 = new String();
+                        String val2 = new String();
+                        try {
+                            val1 = (String) o1.getString("type");
+                            val2 = (String) o2.getString("type");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (new String(order).equals("Ascending" )){
+                            return val1.compareTo(val2);
+                        }else{
+                            return -val1.compareTo(val2);
+                        }
+
+                    }
+                });
+
+                JSONArray sortedUpcomingEvents = new JSONArray();
+                for (int i = 0; i < UpcomingEvents.length(); i++ ){
+                    sortedUpcomingEvents.put(Upcomings.get(i));
+                }
+
+                recycler = getView().findViewById(R.id.upcominglist);
+                UpcomingAdapter upcomingAdapter = new UpcomingAdapter(sortedUpcomingEvents, getContext());
+                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recycler.setAdapter(upcomingAdapter);
+
+
             }
 
             @Override
