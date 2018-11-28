@@ -47,7 +47,8 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     private Boolean pb, NR;
     private MapView mMapView;
     private GoogleMap googleMap;
-    private String lat, lon;
+    private double lat;
+    private double lon;
 
 
     public TabVenue() {
@@ -132,33 +133,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                googleMap.setMyLocationEnabled(true);
-
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
+        //setGoogleMap(42.64834, -73.753957);
 
         return rootView;
     }
@@ -185,6 +160,36 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    private void setGoogleMap(){
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                // For showing a move to my location button
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+
+                // For dropping a marker at a point on the Map
+                LatLng sydney = new LatLng(lat, lon);
+                googleMap.addMarker(new MarkerOptions().position(sydney).title(venuename).snippet(""));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(15).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
     }
 
     @Override
@@ -214,6 +219,9 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
         setRule(VENUE);
         setChildrule(VENUE);
 
+        setlocation(VENUE);
+        setGoogleMap();
+
         if (pb){
             RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
             progressbar.setVisibility(View.GONE);
@@ -222,7 +230,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
             RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
             no_result_message.setVisibility(View.VISIBLE);
         }
-        setlocation(VENUE);
+
 
     }
 
@@ -320,9 +328,11 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
 
     private void setlocation(JSONObject VENUE){
         try {
-            String lat = VENUE.getJSONObject("location").getString("latitude");
-            String lon = VENUE.getJSONObject("location").getString("longitude");
-            String temp = "lat = " + lat + ", lon = " + lon;
+            String lat_temp = VENUE.getJSONObject("location").getString("latitude");
+            String lon_temp = VENUE.getJSONObject("location").getString("longitude");
+            lat = Double.parseDouble(lat_temp);
+            lon = Double.parseDouble(lon_temp);
+            String temp = "lat = " + lat_temp + ", lon = " + lon_temp;
             TextView location = getView().findViewById(R.id.venue_location);
             location.setText(temp);
         } catch (JSONException e) {
@@ -334,9 +344,9 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng sydney = new LatLng(-33.852, 151.211);
+        //googleMap.addMarker(new MarkerOptions().position(sydney)
+         //       .title("Marker in Sydney"));
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }
