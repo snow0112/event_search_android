@@ -133,15 +133,17 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
         switch(item.getItemId()){
             case R.id.action_favorite :
                 if ( favolist.contains(event_id) ){
+                    Toast.makeText(this,  event_name + " is removed from favorite", Toast.LENGTH_SHORT).show();
                     faveditor.remove(event_id);
                     faveditor.commit();
                     item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
                 }else{
+                    Toast.makeText(this,  event_name + " is added to favorite", Toast.LENGTH_SHORT).show();
                     faveditor.putString(event_id,eventstring);
                     faveditor.commit();
                     item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
                 }
-                Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
                 //item.setIcon(R.drawable.heart_fill_red);
                 return true;
             case R.id.action_twitter :

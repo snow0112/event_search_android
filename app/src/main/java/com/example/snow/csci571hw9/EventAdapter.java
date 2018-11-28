@@ -159,7 +159,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.eventitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
 
                 try {
                     Intent detailpage;
@@ -201,6 +201,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         notifyItemRemoved(position);
                         EventList.remove(position);
                         notifyItemChanged(position, EventList.length());
+                        if ( favolist.getAll().size() == 0){
+                            holder.no_favorite_message_in_recycler.setVisibility(View.VISIBLE);
+                        }else{
+                            holder.no_favorite_message_in_recycler.setVisibility(View.GONE);
+                        }
                     }
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
                     notifyDataSetChanged();
@@ -232,6 +237,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public ImageView category;
         public ImageView favoriteresult;
         public RelativeLayout eventitem;
+        public TextView no_favorite_message_in_recycler;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -242,6 +248,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             category = itemView.findViewById(R.id.category);
             favoriteresult = itemView.findViewById(R.id.favoriteresult);
             eventitem = itemView.findViewById(R.id.eventitem);
+            no_favorite_message_in_recycler = itemView.findViewById(R.id.no_favorite_message_in_recycler);
         }
     }
 

@@ -114,7 +114,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
                 if (intent.resolveActivity(context.getPackageManager()) != null) {
                     context.startActivity(intent);
                 }
-                Toast.makeText(context, finalUri, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, finalUri, Toast.LENGTH_SHORT).show();
             }
         });
 
