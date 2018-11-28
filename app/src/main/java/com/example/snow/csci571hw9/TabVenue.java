@@ -332,9 +332,6 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
             String lon_temp = VENUE.getJSONObject("location").getString("longitude");
             lat = Double.parseDouble(lat_temp);
             lon = Double.parseDouble(lon_temp);
-            String temp = "lat = " + lat_temp + ", lon = " + lon_temp;
-            TextView location = getView().findViewById(R.id.venue_location);
-            location.setText(temp);
         } catch (JSONException e) {
             e.printStackTrace();
         }

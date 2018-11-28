@@ -42,7 +42,7 @@ public class TabFav extends Fragment {
 
         View rootView = inflater.inflate(R.layout.tab_favorite, container, false);
         recycler = rootView.findViewById(R.id.favoriterecycle);
-        EventAdapter eventAdapter = new EventAdapter(FavoList, getContext());
+        EventAdapter eventAdapter = new EventAdapter(FavoList, getContext(),0);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setAdapter(eventAdapter);
 
@@ -90,7 +90,7 @@ public class TabFav extends Fragment {
         else{
             no_result_message.setVisibility(View.GONE);
             recycler = getView().findViewById(R.id.favoriterecycle);
-            EventAdapter eventAdapter = new EventAdapter(FavoList, getContext());
+            EventAdapter eventAdapter = new EventAdapter(FavoList, getContext(),0);
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
             recycler.setAdapter(eventAdapter);}
     }

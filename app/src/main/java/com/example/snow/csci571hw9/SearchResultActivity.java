@@ -77,7 +77,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                 TextView noresult = (TextView) findViewById(R.id.eventnoresult);
                             }
                             else{
-                            EventAdapter eventAdapter = new EventAdapter(Events, getApplicationContext());
+                            EventAdapter eventAdapter = new EventAdapter(Events, getApplicationContext(),1);
                             event.setAdapter(eventAdapter);}
 
                         } catch (JSONException e) {

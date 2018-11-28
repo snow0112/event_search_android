@@ -29,6 +29,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     private JSONArray EventList;
     private Context context;
     public  JSONObject event;
+    int Source;
 
     public static SharedPreferences favolist;
     public static SharedPreferences.Editor faveditor;
@@ -48,9 +49,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     // Provide a suitable constructor (depends on the kind of dataset)
 
-    public EventAdapter(JSONArray Events, Context context) {
+    public EventAdapter(JSONArray Events, Context context, int Source) {
         EventList = Events;
         this.context = context;
+        this.Source = Source;
         favolist = context.getSharedPreferences("favoritelist",context.MODE_PRIVATE);
         faveditor = favolist.edit();
         Log.d("tag",EventList.toString());
@@ -195,9 +197,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     Toast.makeText(context, finalName + "is removed from favorite", Toast.LENGTH_SHORT).show();
                     faveditor.remove(finalId);
                     faveditor.commit();
-                    notifyItemRemoved(position);
-                    EventList.remove(position);
-                    notifyItemChanged(position, EventList.length());
+                    if (Source == 0){
+                        notifyItemRemoved(position);
+                        EventList.remove(position);
+                        notifyItemChanged(position, EventList.length());
+                    }
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
                     notifyDataSetChanged();
                 }else{
