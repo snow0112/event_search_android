@@ -1,5 +1,6 @@
 package com.example.snow.csci571hw9;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    public SharedPreferences favolist;
+    public static SharedPreferences.Editor faveditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
+        faveditor = favolist.edit();
 
     }
 

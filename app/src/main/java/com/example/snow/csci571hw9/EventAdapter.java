@@ -67,7 +67,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
@@ -192,11 +192,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
                 //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
                 if ( favolist.contains(finalId) ){
+                    Toast.makeText(context, finalName + "is removed from favorite", Toast.LENGTH_SHORT).show();
                     faveditor.remove(finalId);
                     faveditor.commit();
+                    notifyItemRemoved(position);
+                    EventList.remove(position);
+                    notifyItemChanged(position, EventList.length());
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
                     notifyDataSetChanged();
                 }else{
+                    Toast.makeText(context, finalName + "is added to favorite", Toast.LENGTH_SHORT).show();
                     faveditor.putString(finalId,finalevent);
                     faveditor.commit();
                     holder.favoriteresult.setImageResource(R.drawable.heart_fill_red);
