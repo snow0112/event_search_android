@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class TabUpcoming extends Fragment  {
     private JSONArray UpcomingEvents = new JSONArray();
     private Spinner sortspinner, ascendspinner;
     private RecyclerView recycler;
+    private Boolean pb;
 
     public TabUpcoming() {
         this.venuename = new String();
@@ -52,7 +54,7 @@ public class TabUpcoming extends Fragment  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        pb = false;
         String url = null;
         try {
             url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/songkick-venueID/"+URLEncoder.encode( venuename,"UTF-8");
@@ -69,12 +71,13 @@ public class TabUpcoming extends Fragment  {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error","Volley Error");
-
+                        pb = true;
+                        RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
+                        progressbar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "error! can't find upcoming event" ,Toast.LENGTH_LONG).show();
                     }
                 });
         queue.add(venueinformation);
-
 
     }
 
@@ -93,6 +96,9 @@ public class TabUpcoming extends Fragment  {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        pb = true;
+                        RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
+                        progressbar.setVisibility(View.GONE);
                         UpcomingEvents = response;
                         recycler = (RecyclerView) getView().findViewById(R.id.upcominglist);
                         UpcomingAdapter upcomingAdapter = new UpcomingAdapter(UpcomingEvents, getContext());
@@ -103,7 +109,10 @@ public class TabUpcoming extends Fragment  {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("error","Volley Error");
-                        // TODO: Handle error
+                        pb = true;
+                        RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
+                        progressbar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "error! can't find upcoming event" ,Toast.LENGTH_LONG).show();
                     }
                 });
         queue.add(upcomingevents);
@@ -126,12 +135,17 @@ public class TabUpcoming extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sortspinner = (Spinner) getView().findViewById(R.id.sortby);
+        if (pb){
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
+            progressbar.setVisibility(View.GONE);
+        }
+
+        sortspinner = getView().findViewById(R.id.sortby);
         ArrayAdapter<CharSequence> sortadapter = ArrayAdapter.createFromResource(getActivity(), R.array.sortby, android.R.layout.simple_spinner_item);
         sortadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortspinner.setAdapter(sortadapter);
 
-        ascendspinner = (Spinner) getView().findViewById(R.id.acend);
+        ascendspinner = getView().findViewById(R.id.acend);
         ArrayAdapter<CharSequence> ascendadapter = ArrayAdapter.createFromResource(getActivity(), R.array.acend, android.R.layout.simple_spinner_item);
         ascendadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ascendspinner.setAdapter(ascendadapter);
@@ -406,10 +420,10 @@ public class TabUpcoming extends Fragment  {
             private void SortByName() throws JSONException {
 
                 List<JSONObject> Upcomings = new ArrayList<JSONObject>();
-                for(int i = 0; i <UpcomingEvents.length(); i++){
+                for(int i = 0; i < UpcomingEvents.length(); i++){
                     Upcomings.add(UpcomingEvents.getJSONObject(i));
                 }
-                final String order =ascendspinner.getSelectedItem().toString();
+                final String order = ascendspinner.getSelectedItem().toString();
 
                 Collections.sort(Upcomings, new Comparator<JSONObject>(
                 ) {
@@ -572,6 +586,7 @@ public class TabUpcoming extends Fragment  {
 
             }
         });
+
 
     }
 

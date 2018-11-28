@@ -195,6 +195,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     faveditor.remove(finalId);
                     faveditor.commit();
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
+                    notifyDataSetChanged();
                 }else{
                     faveditor.putString(finalId,finalevent);
                     faveditor.commit();

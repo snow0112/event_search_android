@@ -82,7 +82,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             dataandtime += date_temp;
             time_temp = UpcomingList.getJSONObject(position).getJSONObject("start").getString("time");
 
-            if ( time_temp != null ){
+            if ( time_temp != null && !time_temp.equalsIgnoreCase("null") ){
             dataandtime += "  " + time_temp;}
 
         } catch (JSONException e) {

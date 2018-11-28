@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -45,6 +47,7 @@ public class TabEvent extends Fragment {
     private TextView ticketmaster , seatmap;
     private TableRow row_artist,row_venue, row_time, row_category, row_price, row_Tickerstatus, row_ticketmaster, row_seatmap;
     private JSONObject EVENT = new JSONObject();
+    private Boolean pb;
 
 
     public TabEvent() {
@@ -60,12 +63,16 @@ public class TabEvent extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        pb = false;
         String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-event/" +event_id ;
         RequestQueue queue = Volley.newRequestQueue(getContext());
         JsonObjectRequest addresslocation = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        pb = true;
+                        RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
+                        progressbar.setVisibility(View.GONE);
                         EVENT = response;
                         setartist(EVENT);
                         setvenue(EVENT);
@@ -81,6 +88,10 @@ public class TabEvent extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("error","Volley Error");
                         // TODO: Handle error
+                        pb = true;
+                        RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
+                        progressbar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "error" ,Toast.LENGTH_LONG).show();
                     }
                 });
         queue.add(addresslocation);
@@ -90,7 +101,8 @@ public class TabEvent extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.tab_event, container, false);
+        View V = inflater.inflate(R.layout.tab_event, container, false);
+        return V;
     }
 
     @Override
@@ -122,6 +134,11 @@ public class TabEvent extends Fragment {
         setstatus(EVENT);
         setticketmaster(EVENT);
         setseatmap(EVENT);
+
+        if (pb){
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
+            progressbar.setVisibility(View.GONE);
+        }
 
     }
 

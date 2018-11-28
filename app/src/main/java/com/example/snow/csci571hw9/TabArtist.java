@@ -13,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,6 +46,7 @@ public class TabArtist extends Fragment {
     public JSONObject Artist1_Spotify = new JSONObject(), Artist2_Spotify  = new JSONObject();
     private RecyclerView recycler1, recycler2;
     private JSONArray Artist1_Photos = new JSONArray(), Artist2_Photos = new JSONArray();
+    private Boolean pba1_spotify, pba2_spotify, pba1_photo, pba2_photo;
 
     public TabArtist() {
     }
@@ -52,19 +56,28 @@ public class TabArtist extends Fragment {
         this.segment_id = segment_id;
         this.artist1 = artist1;
         this.artist2 = artist2;
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        pba1_spotify = true;
+        pba2_spotify = true;
         if(  new String(this.segment_id).equals("KZFzniwnSyZfZ7v7nJ" ) ) {
+            Toast.makeText(getActivity(), "search artist" ,Toast.LENGTH_LONG).show();
+            pba1_spotify = false;
             callSpotifyAPI(artist1,1);
             if ( ! new String(artist2).equals("") ){
-            callSpotifyAPI(artist2,2);}
+                pba2_spotify = false;
+                callSpotifyAPI(artist2,2);}
         }
+
+        pba1_photo = false;
+        pba2_photo = true;
         callCustomAPI(artist1,1);
         if ( ! new String(artist2).equals("") ){
+            pba2_photo = true;
             callCustomAPI(artist2,2);}
     }
 
@@ -82,6 +95,9 @@ public class TabArtist extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         if (i == 1){
+                            pba1_spotify = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingspotify_artist1);
+                            progressbar.setVisibility(View.GONE);
                             try {
                                 Artist1_Spotify = response.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
                                 settable(Artist1_Spotify,1);
@@ -90,6 +106,9 @@ public class TabArtist extends Fragment {
                             }
                         }
                         if (i == 2){
+                            pba2_spotify = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingspotify_artist2);
+                            progressbar.setVisibility(View.GONE);
                             try {
                                 Artist2_Spotify = response.getJSONObject("artists").getJSONArray("items").getJSONObject(0);
                                 settable(Artist2_Spotify,2);
@@ -97,15 +116,24 @@ public class TabArtist extends Fragment {
                                 e.printStackTrace();
                             }
                         }
-
-
-                        //hello.setText(response.toString());
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("error","Volley Error");
                         // TODO: Handle error
+                        if (i == 1){
+                            Toast.makeText(getActivity(), "error! can't find artist's spotify" ,Toast.LENGTH_LONG).show();
+                            pba1_spotify = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingspotify_artist1);
+                            progressbar.setVisibility(View.GONE);
+                        }
+                        if (i == 2){
+                            pba2_spotify = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingspotify_artist2);
+                            progressbar.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "error! can't find artist's spotify" ,Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
         queue.add(spotifyinfo);
@@ -126,6 +154,9 @@ public class TabArtist extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         if (i == 1){
+                            pba1_photo = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist1);
+                            progressbar.setVisibility(View.GONE);
                             Artist1_Photos = response;
                             recycler1 = (RecyclerView) getView().findViewById(R.id.artist1_photos);
                             PhotoAdapter photoAdapter1 = new PhotoAdapter(Artist1_Photos, getContext());
@@ -133,6 +164,9 @@ public class TabArtist extends Fragment {
                             recycler1.setAdapter(photoAdapter1);
                         }
                         if(i == 2){
+                            pba2_photo = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
+                            progressbar.setVisibility(View.GONE);
                             Artist2_Photos = response;
                             recycler2 = getView().findViewById(R.id.artist2_photos);
                             PhotoAdapter photoAdapter2 = new PhotoAdapter(Artist2_Photos, getContext());
@@ -145,6 +179,19 @@ public class TabArtist extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("error","Volley Error");
                         // TODO: Handle error
+                        //Toast.makeText(getActivity(), "error" ,Toast.LENGTH_LONG).show();
+                        if (i == 1){
+                            pba1_photo = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist1);
+                            progressbar.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "error! can't find artist's photo" ,Toast.LENGTH_LONG).show();
+                        }
+                        if(i == 2){
+                            pba2_photo = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
+                            progressbar.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "error! can't find artist's photo" ,Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
         queue.add(photos);
@@ -182,6 +229,22 @@ public class TabArtist extends Fragment {
         atris2_name0 = getView().findViewById(R.id.atris2_name0);
         atris2_name0.setText(artist2);
         settable(Artist2_Spotify,2);
+
+        if (pba1_spotify){
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingspotify_artist1);
+            progressbar.setVisibility(View.GONE); }
+        if (pba2_spotify){
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingspotify_artist2);
+            progressbar.setVisibility(View.GONE); }
+        if (pba1_photo){
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist1);
+            progressbar.setVisibility(View.GONE); }
+        if (pba2_photo){
+            RelativeLayout progressbar = getView().findViewById(R.id.searchingphoto_artist2);
+            progressbar.setVisibility(View.GONE);}
+
+
+
 
 
 

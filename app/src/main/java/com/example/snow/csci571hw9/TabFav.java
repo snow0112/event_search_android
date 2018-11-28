@@ -34,7 +34,6 @@ public class TabFav extends Fragment {
     private JSONObject Event;
     private List<JSONObject> favlist = new ArrayList<>();
     private JSONArray FavoList;
-    private Context context;
     private RecyclerView recycler;
 
     @Nullable
@@ -42,7 +41,7 @@ public class TabFav extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.tab_favorite, container, false);
-        recycler = (RecyclerView) rootView.findViewById(R.id.favoriterecycle);
+        recycler = rootView.findViewById(R.id.favoriterecycle);
         EventAdapter eventAdapter = new EventAdapter(FavoList, getContext());
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setAdapter(eventAdapter);
@@ -62,7 +61,19 @@ public class TabFav extends Fragment {
             try {
                 Event = new JSONObject(event);
                 favlist.add(Event);
-
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        FavoList = new JSONArray(favlist);
+    }
+    public void updateList(){
+        FavStringList = favolist.getAll();
+        for (String key : FavStringList.keySet()){
+            String event = getActivity().getSharedPreferences("favoritelist", getActivity().MODE_PRIVATE).getString(key,"nono");
+            try {
+                Event = new JSONObject(event);
+                favlist.add(Event);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -73,5 +84,14 @@ public class TabFav extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message);
+        if (FavoList.length() == 0){
+            no_result_message.setVisibility(View.VISIBLE); }
+        else{
+            no_result_message.setVisibility(View.GONE);
+            recycler = getView().findViewById(R.id.favoriterecycle);
+            EventAdapter eventAdapter = new EventAdapter(FavoList, getContext());
+            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recycler.setAdapter(eventAdapter);}
     }
 }

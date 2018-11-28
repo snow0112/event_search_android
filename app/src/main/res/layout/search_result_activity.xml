@@ -16,11 +16,11 @@
     </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
-
         android:id="@+id/searchingevents">
+
     <ProgressBar
         android:id="@+id/progressBarEvents"
         style="?android:attr/progressBarStyle"
@@ -29,25 +29,35 @@
         android:gravity="center"
         tools:layout_editor_absoluteX="152dp"
         tools:layout_editor_absoluteY="206dp"
-        tools:ignore="MissingConstraints" />
-    <TextView
-        android:visibility="visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/progressBarEvents"
-        android:text="@string/searching_events"
-        android:gravity="center_vertical"/>
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/progressBarEvents"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/progressBarEvents"
+            android:gravity="center"
+            android:text="@string/searching_events"
+            android:visibility="visible" />
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/no_result_message">
 
     <TextView
         android:id="@+id/eventnoresult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
+        android:gravity="center"
         android:text="no result"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
