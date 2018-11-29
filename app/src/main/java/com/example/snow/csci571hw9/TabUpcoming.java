@@ -76,6 +76,7 @@ public class TabUpcoming extends Fragment  {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        sortspinner.setEnabled(true);
                         pb = true;
                         RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
                         progressbar.setVisibility(View.GONE);
@@ -576,6 +577,7 @@ public class TabUpcoming extends Fragment  {
         });
 
         if (SEARCH){
+            sortspinner.setEnabled(false);
             SEARCH = false;
             String url = null;
             try {

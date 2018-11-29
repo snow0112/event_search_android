@@ -56,11 +56,13 @@
     tools:context=".TabUpcoming">
 
     <Spinner
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/sortby" />
 
     <Spinner
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/acend"
