@@ -50,6 +50,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
         eventlistshare = getSharedPreferences("eventlist", MODE_PRIVATE);
         eventshareeditor = eventlistshare.edit();
+        eventshareeditor.putString("Events","").apply();
 
         // Recycler view
         event = (RecyclerView) findViewById(R.id.eventslist);

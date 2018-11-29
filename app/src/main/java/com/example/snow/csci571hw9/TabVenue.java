@@ -333,8 +333,6 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     }
 
     private void setlocation(JSONObject VENUE){
-        TextView nomap = getView().findViewById(R.id.no_location_info);
-        nomap.setVisibility(View.GONE);
         try {
             String lat_temp = VENUE.getJSONObject("location").getString("latitude");
             String lon_temp = VENUE.getJSONObject("location").getString("longitude");
@@ -343,8 +341,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
             setGoogleMap();
         } catch (JSONException e) {
             mMapView.setVisibility(View.GONE);
-            nomap = getView().findViewById(R.id.no_location_info);
-            nomap.setVisibility(View.VISIBLE);
+            //Toast.makeText(getActivity(), "no location information", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
