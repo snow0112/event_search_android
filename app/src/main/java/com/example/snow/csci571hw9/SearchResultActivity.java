@@ -109,6 +109,11 @@ public class SearchResultActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
 
     public void ERRORtoast(){
         Toast.makeText(this, "error" ,Toast.LENGTH_LONG).show();

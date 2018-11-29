@@ -294,7 +294,7 @@ public class TabArtist extends Fragment {
             pba1_spotify = true;
             pba2_spotify = true;
             if(  new String(this.segment_id).equals("KZFzniwnSyZfZ7v7nJ" ) ) {
-                Toast.makeText(getActivity(), "search artist" ,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "search artist" ,Toast.LENGTH_LONG).show();
                 pba1_spotify = false;
                 callSpotifyAPI(artist1,1);
                 if ( ! new String(artist2).equals("") ){

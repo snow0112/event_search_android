@@ -68,6 +68,8 @@ public class TabFav extends Fragment {
         FavoList = new JSONArray(favlist);
     }
     public void updateList(){
+
+        favlist.clear();
         FavStringList = favolist.getAll();
         for (String key : FavStringList.keySet()){
             String event = getActivity().getSharedPreferences("favoritelist", getActivity().MODE_PRIVATE).getString(key,"nono");
@@ -84,14 +86,26 @@ public class TabFav extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
         RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message);
         if (FavoList.length() == 0){
-            no_result_message.setVisibility(View.VISIBLE); }
+            no_result_message.setVisibility(View.VISIBLE);
+            recycler = getView().findViewById(R.id.favoriterecycle);
+            EventAdapter eventAdapter = new EventAdapter(FavoList, getContext(),0);
+            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recycler.setAdapter(eventAdapter);}
         else{
             no_result_message.setVisibility(View.GONE);
             recycler = getView().findViewById(R.id.favoriterecycle);
             EventAdapter eventAdapter = new EventAdapter(FavoList, getContext(),0);
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
             recycler.setAdapter(eventAdapter);}
+
     }
 }

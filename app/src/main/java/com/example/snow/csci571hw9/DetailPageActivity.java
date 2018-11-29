@@ -137,6 +137,7 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
                     faveditor.remove(event_id);
                     faveditor.commit();
                     item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+
                 }else{
                     Toast.makeText(this,  event_name + " is added to favorite", Toast.LENGTH_SHORT).show();
                     faveditor.putString(event_id,eventstring);

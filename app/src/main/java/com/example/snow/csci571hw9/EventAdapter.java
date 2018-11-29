@@ -47,6 +47,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
     }
 
+
     // Provide a suitable constructor (depends on the kind of dataset)
 
     public EventAdapter(JSONArray Events, Context context, int Source) {
@@ -55,7 +56,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         this.Source = Source;
         favolist = context.getSharedPreferences("favoritelist",context.MODE_PRIVATE);
         faveditor = favolist.edit();
-        Log.d("tag",EventList.toString());
+        //Log.d("tag",EventList.toString());
     }
 
     // Create new views (invoked by the layout manager)
@@ -191,7 +192,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.favoriteresult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, finalName, Toast.LENGTH_SHORT).show();
                 //String eventinfav = context.getSharedPreferences("favoritelist", context.MODE_PRIVATE).getString(finalId,"nono");
                 if ( favolist.contains(finalId) ){
                     Toast.makeText(context, finalName + " is removed from favorite", Toast.LENGTH_SHORT).show();

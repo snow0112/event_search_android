@@ -191,8 +191,6 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                             specifylocation_validation.setVisibility(View.VISIBLE);}
                         return;
                     }
-
-
                     try {
                         String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/address-find/" +URLEncoder.encode(speclox,"UTF-8") ;
                         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -207,8 +205,16 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                             specifgeohasg = GeoHash.geoHashStringWithCharacterPrecision(specifylat,specifylon,9);
                                             forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + specifgeohasg ;
                                             //Toast.makeText(getActivity(), forminputs ,Toast.LENGTH_LONG).show();
+
+                                            // open nwe activity
+                                            Intent searchresult;
+                                            searchresult = new Intent(getActivity(), SearchResultActivity.class);
+                                            searchresult.putExtra("forminputs",forminputs);
+                                            startActivity (searchresult);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
+                                            Toast.makeText(getActivity(), "error! can't get geohash from specified locaiotn" ,Toast.LENGTH_LONG).show();
+                                            return;
                                         }
                                     }
                                 }, new Response.ErrorListener() {
@@ -216,6 +222,7 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d("error","Volley Error");
                                         Toast.makeText(getActivity(), "error! can't get geohash from specified locaiotn" ,Toast.LENGTH_LONG).show();
+                                        return;
                                     }
                                 });
                         queue.add(addresslocation);
@@ -223,20 +230,19 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                         e.printStackTrace();
                     }
                 } else{
+                    forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
+                    // open nwe activity
+                    Intent searchresult;
+                    searchresult = new Intent(getActivity(), SearchResultActivity.class);
+                    searchresult.putExtra("forminputs",forminputs);
+                    startActivity (searchresult);
                     // validation check for keyword
                     if (new String(key).equals("") || key == null){
                         Toast.makeText(getActivity(), "Please fix all fields with errors" ,Toast.LENGTH_SHORT).show();
                         keyword_validation.setVisibility(View.VISIBLE);
                         return;
                     }
-                    forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
                 }
-
-                // open nwe activity
-                Intent searchresult;
-                searchresult = new Intent(getActivity(), SearchResultActivity.class);
-                searchresult.putExtra("forminputs",forminputs);
-                startActivity (searchresult);
             }
         });
 
