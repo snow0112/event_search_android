@@ -32,10 +32,9 @@ public class SearchResultActivity extends AppCompatActivity {
 
 
     private String forminputs;
-    private TextView hello;
     private RecyclerView event;
-    public static SharedPreferences favolist;
-    public static SharedPreferences.Editor faveditor;
+    public static SharedPreferences eventlistshare;
+    public static SharedPreferences.Editor eventshareeditor;
     private JSONArray Events;
 
 
@@ -46,12 +45,11 @@ public class SearchResultActivity extends AppCompatActivity {
 
         Intent inputsource = getIntent();
         forminputs = inputsource.getStringExtra("forminputs");
-        hello = (TextView) findViewById(R.id.text);
         RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
         pb.setVisibility(View.VISIBLE);
 
-        favolist = getSharedPreferences("favoritelist", MODE_PRIVATE);
-        faveditor = favolist.edit();
+        eventlistshare = getSharedPreferences("eventlist", MODE_PRIVATE);
+        eventshareeditor = eventlistshare.edit();
 
         // Recycler view
         event = (RecyclerView) findViewById(R.id.eventslist);
@@ -73,6 +71,7 @@ public class SearchResultActivity extends AppCompatActivity {
                         pb.setVisibility(View.INVISIBLE);
                         try {
                             Events = response.getJSONObject("_embedded").getJSONArray("events");
+                            AddEventsToSharedPreference();
                             //hello.setText(Events.toString());
                             if (Events.length() == 0 ){
                                 RelativeLayout no_result_message = findViewById(R.id.no_result_message_search);
@@ -109,10 +108,32 @@ public class SearchResultActivity extends AppCompatActivity {
 
     }
 
+    public void AddEventsToSharedPreference(){
+        String event_string = new String();
+        event_string = Events.toString() ;
+        eventshareeditor.putString("Events",event_string).commit();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+
         //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+        String event_string = getSharedPreferences("eventlist", MODE_PRIVATE).getString("Events","nono");
+        JSONArray Events_resume = new JSONArray();
+        try {
+            Events_resume = new JSONArray(event_string);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        event = (RecyclerView) findViewById(R.id.eventslist);
+        event.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        event.setLayoutManager(mLayoutManager);
+        EventAdapter eventAdapter = new EventAdapter(Events_resume, getApplicationContext(),1);
+        event.setAdapter(eventAdapter);
+
     }
 
     public void ERRORtoast(){
