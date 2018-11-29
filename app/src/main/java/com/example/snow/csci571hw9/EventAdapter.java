@@ -202,9 +202,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         EventList.remove(position);
                         notifyItemChanged(position, EventList.length());
                         if ( favolist.getAll().size() == 0){
-                            holder.no_favorite_message_in_recycler.setVisibility(View.VISIBLE);
+                            Toast.makeText(context, "no favorite", Toast.LENGTH_SHORT).show();
                         }else{
-                            holder.no_favorite_message_in_recycler.setVisibility(View.GONE);
+                            //Toast.makeText(context, "have favorite", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                     holder.favoriteresult.setImageResource(R.drawable.heart_outline_black);
