@@ -41,6 +41,7 @@ public class TabUpcoming extends Fragment  {
     private Spinner sortspinner, ascendspinner;
     private RecyclerView recycler;
     private Boolean pb, NR;
+    private Boolean SEARCH;
 
     public TabUpcoming() {
         this.venuename = new String();
@@ -56,32 +57,7 @@ public class TabUpcoming extends Fragment  {
 
         pb = false;
         NR = false;
-        String url = null;
-        try {
-            url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/songkick-venueID/"+URLEncoder.encode( venuename,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        JsonArrayRequest venueinformation = new JsonArrayRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        call2dnAPI( response );
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        pb = true;
-                        RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
-                        progressbar.setVisibility(View.GONE);
-                        NR = true;
-                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_upcoming);
-                        no_result_message.setVisibility(View.VISIBLE);
-                        Toast.makeText(getActivity(), "error! can't find upcoming event" ,Toast.LENGTH_LONG).show();
-                    }
-                });
-        queue.add(venueinformation);
+        SEARCH = true;
 
     }
 
@@ -598,6 +574,36 @@ public class TabUpcoming extends Fragment  {
 
             }
         });
+
+        if (SEARCH){
+            SEARCH = false;
+            String url = null;
+            try {
+                url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/songkick-venueID/"+URLEncoder.encode( venuename,"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            JsonArrayRequest venueinformation = new JsonArrayRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            call2dnAPI( response );
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            pb = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingupcoming);
+                            progressbar.setVisibility(View.GONE);
+                            NR = true;
+                            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_upcoming);
+                            no_result_message.setVisibility(View.VISIBLE);
+                            Toast.makeText(getActivity(), "error! can't find upcoming event" ,Toast.LENGTH_LONG).show();
+                        }
+                    });
+            queue.add(venueinformation);
+        }
 
 
     }

@@ -47,6 +47,7 @@ public class TabArtist extends Fragment {
     private RecyclerView recycler1, recycler2;
     private JSONArray Artist1_Photos = new JSONArray(), Artist2_Photos = new JSONArray();
     private Boolean pba1_spotify, pba2_spotify, pba1_photo, pba2_photo, NR1, NR2;
+    private Boolean SEARCH;
 
     public TabArtist() {
     }
@@ -62,26 +63,29 @@ public class TabArtist extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SEARCH = true;
         NR1 = false;
         NR2 = false;
 
         pba1_spotify = true;
         pba2_spotify = true;
         if(  new String(this.segment_id).equals("KZFzniwnSyZfZ7v7nJ" ) ) {
-            Toast.makeText(getActivity(), "search artist" ,Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "search artist" ,Toast.LENGTH_LONG).show();
             pba1_spotify = false;
-            callSpotifyAPI(artist1,1);
+            //callSpotifyAPI(artist1,1);
             if ( ! new String(artist2).equals("") ){
                 pba2_spotify = false;
-                callSpotifyAPI(artist2,2);}
+                //callSpotifyAPI(artist2,2);
+            }
         }
 
         pba1_photo = false;
         pba2_photo = true;
-        callCustomAPI(artist1,1);
+        //callCustomAPI(artist1,1);
         if ( ! new String(artist2).equals("") ){
-            pba2_photo = true;
-            callCustomAPI(artist2,2);}
+            pba2_photo = false;
+            //callCustomAPI(artist2,2);
+        }
     }
 
     public void callSpotifyAPI(String artist, final int i){
@@ -282,6 +286,29 @@ public class TabArtist extends Fragment {
         if(NR2){
             TextView no_result_message = getView().findViewById(R.id.no_result_message_photo2);
             no_result_message.setVisibility(View.VISIBLE);
+        }
+
+        if (SEARCH){
+            SEARCH = false;
+
+            pba1_spotify = true;
+            pba2_spotify = true;
+            if(  new String(this.segment_id).equals("KZFzniwnSyZfZ7v7nJ" ) ) {
+                Toast.makeText(getActivity(), "search artist" ,Toast.LENGTH_LONG).show();
+                pba1_spotify = false;
+                callSpotifyAPI(artist1,1);
+                if ( ! new String(artist2).equals("") ){
+                    pba2_spotify = false;
+                    callSpotifyAPI(artist2,2);}
+            }
+
+            pba1_photo = false;
+            pba2_photo = true;
+            callCustomAPI(artist1,1);
+            if ( ! new String(artist2).equals("") ){
+                pba2_photo = false;
+                callCustomAPI(artist2,2);}
+
         }
 
 

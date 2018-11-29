@@ -48,6 +48,7 @@ public class TabEvent extends Fragment {
     private TableRow row_artist,row_venue, row_time, row_category, row_price, row_Tickerstatus, row_ticketmaster, row_seatmap;
     private JSONObject EVENT = new JSONObject();
     private Boolean pb, NR;
+    private Boolean SEARCH;
 
 
     public TabEvent() {
@@ -62,44 +63,9 @@ public class TabEvent extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        SEARCH = true;
         NR = false;
         pb = false;
-        String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-event/" +event_id ;
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        JsonObjectRequest addresslocation = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pb = true;
-                        RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
-                        progressbar.setVisibility(View.GONE);
-                        EVENT = response;
-                        setartist(EVENT);
-                        setvenue(EVENT);
-                        settime(EVENT);
-                        setcategory(EVENT);
-                        setprice(EVENT);
-                        setstatus(EVENT);
-                        setticketmaster(EVENT);
-                        setseatmap(EVENT);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("error","Volley Error");
-                        // TODO: Handle error
-                        pb = true;
-                        RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
-                        progressbar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "error" ,Toast.LENGTH_LONG).show();
-                        NR = true;
-                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_event);
-                        no_result_message.setVisibility(View.VISIBLE);
-                    }
-                });
-        queue.add(addresslocation);
-
     }
 
     @Nullable
@@ -148,6 +114,46 @@ public class TabEvent extends Fragment {
             NR = true;
             RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_event);
             no_result_message.setVisibility(View.VISIBLE);
+        }
+
+        if (SEARCH){
+            SEARCH = false;
+            String url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-event/" +event_id ;
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            JsonObjectRequest addresslocation = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            pb = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
+                            progressbar.setVisibility(View.GONE);
+                            EVENT = response;
+                            setartist(EVENT);
+                            setvenue(EVENT);
+                            settime(EVENT);
+                            setcategory(EVENT);
+                            setprice(EVENT);
+                            setstatus(EVENT);
+                            setticketmaster(EVENT);
+                            setseatmap(EVENT);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("error","Volley Error");
+                            // TODO: Handle error
+                            pb = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingdetails);
+                            progressbar.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "error" ,Toast.LENGTH_LONG).show();
+                            NR = true;
+                            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_event);
+                            no_result_message.setVisibility(View.VISIBLE);
+                        }
+                    });
+            queue.add(addresslocation);
+
+
         }
 
     }

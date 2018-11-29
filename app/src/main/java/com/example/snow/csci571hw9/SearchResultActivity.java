@@ -36,6 +36,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private RecyclerView event;
     public static SharedPreferences favolist;
     public static SharedPreferences.Editor faveditor;
+    private JSONArray Events;
 
 
     @Override
@@ -71,14 +72,18 @@ public class SearchResultActivity extends AppCompatActivity {
                         RelativeLayout pb = (RelativeLayout) findViewById(R.id.searchingevents);
                         pb.setVisibility(View.INVISIBLE);
                         try {
-                            JSONArray Events = response.getJSONObject("_embedded").getJSONArray("events");
+                            Events = response.getJSONObject("_embedded").getJSONArray("events");
                             //hello.setText(Events.toString());
                             if (Events.length() == 0 ){
-                                TextView noresult = (TextView) findViewById(R.id.eventnoresult);
+                                RelativeLayout no_result_message = findViewById(R.id.no_result_message_search);
+                                no_result_message.setVisibility(View.VISIBLE);
                             }
                             else{
+                                RelativeLayout no_result_message = findViewById(R.id.no_result_message_search);
+                                no_result_message.setVisibility(View.GONE);
                             EventAdapter eventAdapter = new EventAdapter(Events, getApplicationContext(),1);
-                            event.setAdapter(eventAdapter);}
+                            event.setAdapter(eventAdapter);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -103,6 +108,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
 
     }
+
 
     public void ERRORtoast(){
         Toast.makeText(this, "error" ,Toast.LENGTH_LONG).show();

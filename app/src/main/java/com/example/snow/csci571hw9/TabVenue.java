@@ -49,6 +49,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private double lat;
     private double lon;
+    private Boolean SEARCH;
 
 
     public TabVenue() {
@@ -65,51 +66,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
 
         pb = false;
         NR = false;
-        String url = null;
-        try {
-            url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-venue/" + URLEncoder.encode(venuename, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        JsonObjectRequest addresslocation = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pb = true;
-                        RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
-                        progressbar.setVisibility(View.GONE);
-                        try {
-                            VENUE = response.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            NR = true;
-                            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
-                            no_result_message.setVisibility(View.VISIBLE);
-                        }
-                        setName(VENUE);
-                        setAddress(VENUE);
-                        setCity(VENUE);
-                        setPhone(VENUE);
-                        setHours(VENUE);
-                        setRule(VENUE);
-                        setChildrule(VENUE);
-
-                        setlocation(VENUE);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        pb = true;
-                        RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
-                        progressbar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "error! can't find venue detail", Toast.LENGTH_LONG).show();
-                        NR = true;
-                        RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
-                        no_result_message.setVisibility(View.VISIBLE);
-                    }
-                });
-        queue.add(addresslocation);
+        SEARCH = true;
 
         //MapFragment m = new MapFragment();
 
@@ -163,6 +120,7 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     }
 
     private void setGoogleMap(){
+        mMapView.setVisibility(View.VISIBLE);
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
@@ -220,7 +178,6 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
         setChildrule(VENUE);
 
         setlocation(VENUE);
-        setGoogleMap();
 
         if (pb){
             RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
@@ -229,6 +186,55 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
         if (NR){
             RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
             no_result_message.setVisibility(View.VISIBLE);
+        }
+
+        if (SEARCH){
+            SEARCH = false;
+            String url = null;
+            try {
+                url = "http://csci571snowhw8.us-east-2.elasticbeanstalk.com/detail-venue/" + URLEncoder.encode(venuename, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            JsonObjectRequest addresslocation = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            pb = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
+                            progressbar.setVisibility(View.GONE);
+                            try {
+                                VENUE = response.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                NR = true;
+                                RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
+                                no_result_message.setVisibility(View.VISIBLE);
+                            }
+                            setName(VENUE);
+                            setAddress(VENUE);
+                            setCity(VENUE);
+                            setPhone(VENUE);
+                            setHours(VENUE);
+                            setRule(VENUE);
+                            setChildrule(VENUE);
+
+                            setlocation(VENUE);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            pb = true;
+                            RelativeLayout progressbar = getView().findViewById(R.id.searchingvenue);
+                            progressbar.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "error! can't find venue detail", Toast.LENGTH_LONG).show();
+                            NR = true;
+                            RelativeLayout no_result_message = getView().findViewById(R.id.no_result_message_venue);
+                            no_result_message.setVisibility(View.VISIBLE);
+                        }
+                    });
+            queue.add(addresslocation);
         }
 
 
@@ -327,12 +333,18 @@ public class TabVenue extends Fragment implements OnMapReadyCallback {
     }
 
     private void setlocation(JSONObject VENUE){
+        TextView nomap = getView().findViewById(R.id.no_location_info);
+        nomap.setVisibility(View.GONE);
         try {
             String lat_temp = VENUE.getJSONObject("location").getString("latitude");
             String lon_temp = VENUE.getJSONObject("location").getString("longitude");
             lat = Double.parseDouble(lat_temp);
             lon = Double.parseDouble(lon_temp);
+            setGoogleMap();
         } catch (JSONException e) {
+            mMapView.setVisibility(View.GONE);
+            nomap = getView().findViewById(R.id.no_location_info);
+            nomap.setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
     }
