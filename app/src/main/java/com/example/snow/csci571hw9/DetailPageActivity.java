@@ -117,9 +117,9 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
 
 
         if (favolist.contains(event_id) ){
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_red));
         }else{
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
         }
 
         //ImageView twetterimg = (ImageView) findViewById(R.id.action_twitter);
@@ -136,13 +136,13 @@ public class DetailPageActivity extends AppCompatActivity implements AdapterView
                     Toast.makeText(this,  event_name + " is removed from favorite", Toast.LENGTH_SHORT).show();
                     faveditor.remove(event_id);
                     faveditor.commit();
-                    item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_outline_white));
+                    item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
 
                 }else{
                     Toast.makeText(this,  event_name + " is added to favorite", Toast.LENGTH_SHORT).show();
                     faveditor.putString(event_id,eventstring);
                     faveditor.commit();
-                    item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_white));
+                    item.setIcon(ContextCompat.getDrawable(this, R.drawable.heart_fill_red));
                 }
                 //Toast.makeText(this, "favorite" ,Toast.LENGTH_SHORT).show();
                 //item.setIcon(R.drawable.heart_fill_red);

@@ -150,11 +150,16 @@
 
         />
 
-    <Button
-        android:id="@+id/search"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/specifylocation"
+        android:layout_centerHorizontal="true">
+
+    <Button
+        android:id="@+id/search"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:text="@string/search"
         android:layout_margin="10dp"
@@ -162,14 +167,13 @@
 
     <Button
         android:id="@+id/clear"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/specifylocation"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/search"
         android:text="@string/clear"
         android:layout_margin="10dp"/>
 
-
+</RelativeLayout>
 </RelativeLayout>

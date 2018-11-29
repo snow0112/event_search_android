@@ -172,6 +172,9 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                 seg = segmentId();
 
                 rad = radius.getText().toString();
+                if (new String(rad).equals("") || rad == null ){
+                    rad = "10";
+                }
                 String unittemp = unit.getSelectedItem().toString();
                 if ( new String(unittemp).equals("Miles") ){unitt = "miles";}else {unitt = "km";}
                 int selectedid = from.getCheckedRadioButtonId();
@@ -230,18 +233,18 @@ public class TabSearch extends Fragment implements AdapterView.OnItemSelectedLis
                         e.printStackTrace();
                     }
                 } else{
-                    forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
-                    // open nwe activity
-                    Intent searchresult;
-                    searchresult = new Intent(getActivity(), SearchResultActivity.class);
-                    searchresult.putExtra("forminputs",forminputs);
-                    startActivity (searchresult);
                     // validation check for keyword
                     if (new String(key).equals("") || key == null){
                         Toast.makeText(getActivity(), "Please fix all fields with errors" ,Toast.LENGTH_SHORT).show();
                         keyword_validation.setVisibility(View.VISIBLE);
                         return;
                     }
+                    forminputs = key +"&segmentId="+ seg + "&radius="+ rad +"&unit="+ unitt +"&geoPoint=" + currentgeohasg ;
+                    // open nwe activity
+                    Intent searchresult;
+                    searchresult = new Intent(getActivity(), SearchResultActivity.class);
+                    searchresult.putExtra("forminputs",forminputs);
+                    startActivity (searchresult);
                 }
             }
         });
